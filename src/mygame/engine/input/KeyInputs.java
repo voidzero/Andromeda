@@ -9,7 +9,6 @@ import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.InputListener;
 import com.jme3.input.controls.KeyTrigger;
 import mygame.helpers.Share;
-import sun.security.jca.GetInstance;
 
 /**
  *

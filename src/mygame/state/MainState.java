@@ -29,6 +29,7 @@ public class MainState extends AbstractState{
         int [] globalTriggers =   {KeyInput.KEY_B};
         String [] globalActions = {"buildToggle"};
         
+        setKeyInputs("Main", mainTriggers, mainActions);
         setGlobalKeyInputs("Main_Global", globalTriggers, globalActions);
         
         String [] mouseActions = {"leftClick"};

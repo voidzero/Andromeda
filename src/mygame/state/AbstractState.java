@@ -130,6 +130,7 @@ public class AbstractState extends AbstractAppState {
                  
                  //enable own state inputs
                  if(kinputs != null) {
+                    System.out.println("enable own inputs.");
                     kinputs.attachListener();
                  }
                  
@@ -142,7 +143,13 @@ public class AbstractState extends AbstractAppState {
                 
                  //disable own state inputs (except global_kinputs)
                  if(kinputs != null) {
+                    System.out.println("disable own inputs.");
                     kinputs.detachListener();
+                 }
+                 
+                 //re-attach listener for global keys when needed
+                 if(global_kinputs != null) {
+                    global_kinputs.attachListener();
                  }
                  
                  unsetMouseActions(mactions);
