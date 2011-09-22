@@ -6,8 +6,6 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.scene.Node;
-import java.util.ArrayList;
-import java.util.Arrays;
 import mygame.engine.Camera;
 import mygame.engine.Camera.CameraMode;
 import mygame.engine.GuiCamera;
@@ -38,6 +36,7 @@ public class AbstractState extends AbstractAppState {
     private MouseCursor mouseCursor = null;
     private Crosshair ch = null;
     private KeyInputs kinputs = null;
+    private KeyInputs global_kinputs = null;
     private CameraMode parentMode = null;
     
     private boolean cursorActive;
@@ -49,6 +48,8 @@ public class AbstractState extends AbstractAppState {
         }
         
         this.parentNode = parent;
+        
+        setEnabled(false);
     }
     
     @Override 
@@ -67,6 +68,10 @@ public class AbstractState extends AbstractAppState {
         
         if(kinputs != null) {
             kinputs.attachListener();
+        }
+        
+        if(global_kinputs != null) {
+            global_kinputs.attachListener();
         }
         
         if(mouseCursor != null) {
@@ -94,6 +99,10 @@ public class AbstractState extends AbstractAppState {
             kinputs.detachListener();
         }
         
+        if(global_kinputs != null) {
+            global_kinputs.detachListener();
+        }
+        
         if(mouseCursor != null) {
             guiNode.detachChild(mouseCursor);
         }
@@ -115,12 +124,26 @@ public class AbstractState extends AbstractAppState {
          else {
              //not switching itself so disable / enable own stuff
              if(state.isEnabled()) {
+                 //disable target state
+                 System.out.println("Substate paused.");
                  shares.stateManager.detach(state);
+                 
+                 //enable own state inputs
+                 if(kinputs != null) {
+                    kinputs.attachListener();
+                 }
                  
                  setMouseActions(mactions, mtriggers);
              }
              else {
+                 //enable target state
+                 System.out.println("Substate running.");
                  state.run();
+                
+                 //disable own state inputs (except global_kinputs)
+                 if(kinputs != null) {
+                    kinputs.detachListener();
+                 }
                  
                  unsetMouseActions(mactions);
              }
@@ -296,13 +319,23 @@ public class AbstractState extends AbstractAppState {
         kinputs.addInputs(keys, actions);
     }
     
+    public void setGlobalKeyInputs(String keyGroup, int [] keys, String [] actions) {
+        setGlobalKeyInputs(keyGroup, null, keys, actions);
+    }
+    
+    public void setGlobalKeyInputs(String keyGroup, String subGroup, int [] keys, String [] actions) {
+        global_kinputs = new KeyInputs(keyGroup, subGroup);
+        
+        global_kinputs.addInputs(keys, actions);
+    }
     
     public void setKeyListener(ActionListener actionListener) {
         if(kinputs != null) {
             kinputs.addListener(actionListener);
         }
-        else {
-            throw new UnsupportedOperationException("State : can't add keyListener without actions / triggers");
+        
+        if(global_kinputs != null) {
+            global_kinputs.addListener(actionListener);
         }
     }
     

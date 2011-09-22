@@ -23,10 +23,13 @@ public class MainState extends AbstractState{
     private MainState(Node parent) {
         super(parent);
         
-        int [] mainTriggers =   {KeyInput.KEY_I, KeyInput.KEY_B, KeyInput.KEY_F11, KeyInput.KEY_TAB};
-        String [] mainActions = {"infoToggle",   "buildToggle", "fullScreenToggle", "mouseToggle"};
+        int [] mainTriggers =   {KeyInput.KEY_I, KeyInput.KEY_F11  , KeyInput.KEY_TAB};
+        String [] mainActions = {"infoToggle"  , "fullScreenToggle", "mouseToggle"};
         
-        setKeyInputs("Main", mainTriggers, mainActions);
+        int [] globalTriggers =   {KeyInput.KEY_B};
+        String [] globalActions = {"buildToggle"};
+        
+        setGlobalKeyInputs("Main_Global", globalTriggers, globalActions);
         
         String [] mouseActions = {"leftClick"};
         int [] mouseTriggers =   {MouseInput.BUTTON_LEFT};   
@@ -49,8 +52,10 @@ public class MainState extends AbstractState{
                     System.out.println("switching builder");
                     if(builder == null) {
                         builder = new Builder(rootNode);
+                        
                         enableCursor(false);
-                        builder.run();
+                        
+                        switchState(builder);
                     }
                     else {
                         if(builder.isEnabled()) {
