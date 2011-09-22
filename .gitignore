@@ -1,3 +1,9 @@
+#Netbeans config, not working?
+build/*
+nbproject/private/*
+dist/*
 build/
 nbproject/private/
 dist/
+
+*.class
