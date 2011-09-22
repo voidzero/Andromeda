@@ -17,7 +17,7 @@ public class SpaceShips implements BlockIndex {
     public String [] getCategory(String category) {
         switch(categories.valueOf(category)) {
             case Hulls: {
-                String [] res = {"LightAlloy", "LightAlloyWindowed"};
+                String [] res = {"LightAlloyBlock", "LightAlloy", "LightAlloyWindowed"};
                 return res;
             }
         }
