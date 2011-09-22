@@ -1,0 +1,12 @@
+Material default_grid : Common/MatDefs/Misc/Unshaded.j3md {
+     MaterialParameters {
+        ColorMap : Textures/blueprint_01.png
+        SeparateTexCoord : false
+     }
+    AdditionalRenderState {
+      FaceCull Off
+      Blend Alpha
+      DepthTest On
+      DepthWrite On
+    }
+}

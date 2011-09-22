@@ -1,0 +1,13 @@
+Material window_01 : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+        DiffuseMap : Textures/window_01.png
+        SpecularMap : Textures/window_01_shine.png
+        Shininess : 100.0
+     }
+    AdditionalRenderState {
+      FaceCull Back
+      DepthWrite Off
+      Blend Alpha
+      DepthTest On
+    }
+}

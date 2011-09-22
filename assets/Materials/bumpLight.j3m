@@ -1,0 +1,7 @@
+Material bump Light : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+         Shininess: 8.0
+         DiffuseMap: Repeat Textures/ship_plating_01.png
+         NormalMap:  Repeat Textures/ship_plating_01_normal.png
+     }
+}

@@ -1,0 +1,18 @@
+Material ship_plating_01 : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+         Shininess: 40.0
+         DiffuseMap: Repeat Textures/ship_plating_01.png
+        SpecularMap : Textures/ship_plating_01_shine.png
+        SeparateTexCoord : false
+        VertexLighting : false
+        HighQuality : false
+        NormalMap : Textures/ship_plating_01_normal.png
+     }
+    AdditionalRenderState {
+      FaceCull Back
+      DepthTest On
+      DepthWrite On
+      ColorWrite On
+    }
+}
+
