@@ -5,14 +5,10 @@
 package mygame.engine.gui.Panels;
 
 import com.jme3.light.AmbientLight;
-import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
-import mygame.engine.blocks.Block;
 import mygame.engine.blocks.BlockIndex;
 import mygame.engine.blocks.Interface.BlockInterface;
-import mygame.engine.blocks.Spaceship.Hulls.LightAlloy;
 import mygame.engine.gui.Panel;
 import mygame.engine.nodes.GroupNode;
 import mygame.helpers.Share;

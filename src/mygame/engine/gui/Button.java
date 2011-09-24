@@ -5,9 +5,9 @@
 package mygame.engine.gui;
 
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.texture.Image;
 import com.jme3.ui.Picture;
 import mygame.Assets;
 import mygame.engine.gui.Interfaces.GuiListener;
@@ -35,12 +35,18 @@ public class Button extends Picture{
         setHeight(32);
         setBoundRefresh();
         
+        Material m = new Material(assets.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        
         if(texture == null) {
-            Material m = new Material(assets.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             m.setColor("Color", ColorRGBA.Blue);
-            setMaterial(m);
             //@ TODO Button caption
         }
+        else {
+            m.setTexture("ColorMap", assets.assetManager.loadTexture(texture));
+            m.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        }
+        
+        setMaterial(m);
                 
         setQueueBucket(Bucket.Gui);
         setLocalTranslation(100, 100, 0);

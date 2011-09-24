@@ -26,7 +26,7 @@ public class Panel extends GroupNode{
     private Picture panel = null;
     private Share shares = Share.getInstance();
     private Assets assets = Assets.getInstance();
-    private Button closeButton = new Button("Close window");
+    private Button closeButton = new Button("Close window", "Textures/panel_close_button.png");
     private GroupNode panelNode = this;
     
     private int corr_x = 0;
@@ -81,8 +81,7 @@ public class Panel extends GroupNode{
         
         closeButton.listener = new GuiListener() {
             public void onAction() {
-                System.out.println("Close!");
-                getParent().attachChild(panelNode);
+                getParent().detachChild(panelNode);
             }
         };
         

@@ -6,6 +6,7 @@ package mygame.state;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
@@ -38,7 +39,7 @@ public class Builder extends AbstractState{
     private String blockToPlace = "LightAlloyWindowed";
     private BObject obj_loaded = new BObject();
     private BlockCatalog catalogPanel = new BlockCatalog(obj_loaded.inventory);
-    
+    private boolean guiMode;
     private Grid grid;
     
     public Builder(Node parent) {
@@ -51,17 +52,41 @@ public class Builder extends AbstractState{
         this.size_x = size_x;
         this.size_z = size_z;
         
+        String [] keyActions = {"guiMode"};
+        int [] keyTriggers = {KeyInput.KEY_TAB};
+        
         String [] mouseActions = {"addBlock",             "removeBlock"};
         int [] mouseTriggers =   {MouseInput.BUTTON_LEFT, MouseInput.BUTTON_RIGHT};
         
+        setKeyInputs("Builder", keyTriggers, keyActions);
         setMouseActions(mouseActions, mouseTriggers);
         
         actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
-                if("addBlock".equals(name) && keyPressed) {                
-                    GroupNode blb = obj_loaded.inventory.getBlock(blockToPlace).getNode();
-                    rootNode.attachChild(blb);
-                    blb.setLocalTranslation(checkCollision());
+                if("addBlock".equals(name) && keyPressed) {
+                    if(!guiMode) {
+                        GroupNode blb = obj_loaded.inventory.getBlock(blockToPlace).getNode();
+                        rootNode.attachChild(blb);
+                        blb.setLocalTranslation(checkCollision());
+                    }
+                    else {
+                        if(isCursorActive()) {
+                            CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
+                        }
+                    }
+                }
+                
+                if("guiMode".equals(name) && keyPressed) {
+                    if(isCursorActive()) {
+                        enableCursor(false);
+                        getCamera().setMode(CameraMode.FLY_CLIP);
+                        guiMode = false;
+                    }
+                    else {
+                        enableCursor(true);
+                        getCamera().setMode(CameraMode.STATIC);
+                        guiMode = true;
+                    }
                 }
                 
                 if("removeBlock".equals(name) && keyPressed) {
@@ -90,6 +115,7 @@ public class Builder extends AbstractState{
         initGrid();
         
         showCrossHair(true);
+        setKeyListener(actionListener);
     }
     
     private void initGrid() {
