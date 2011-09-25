@@ -8,6 +8,7 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.texture.Texture;
 import java.util.ArrayList;
 import mygame.Assets;
+import mygame.engine.gui.Interfaces.GuiAction;
 import mygame.engine.gui.Interfaces.GuiListener;
 import mygame.engine.nodes.GroupNode;
 
@@ -15,14 +16,14 @@ import mygame.engine.nodes.GroupNode;
  *
  * @author Dansion
  */
-public class List extends GroupNode {
+public class List extends GroupNode implements GuiAction {
     private Assets assets = Assets.getInstance();
     
     private ArrayList <String> captions = new <String> ArrayList();
     private ArrayList <Integer> values = new <Integer> ArrayList();
     
     private int visibleOptions;
-    private int length;
+    private int length = 0;
     private int value;
     public int scroll_y;
     
@@ -50,11 +51,25 @@ public class List extends GroupNode {
         downTexture = list_down_texture;
         
         upButton = new Button("Up", upTexture);
-        downButton = new Button("", downTexture);
+        downButton = new Button("Down", downTexture);
         
         upButton.setLocalTranslation(0, visibleOptions * 32 + downButton.getHeight(), 0);
         downButton.setLocalTranslation(0, 0, 0);
         
+        upButton.listener = new GuiListener() {
+            public void onAction(int returnValue) {
+                scroll_y = scroll_y - 1;
+                renderList();
+            }
+        };
+        
+        downButton.listener = new GuiListener() {
+            public void onAction(int returnValue) {
+                scroll_y = scroll_y + 1;
+                renderList();
+            }
+        };
+                
         attachChild(upButton);
         attachChild(downButton);
         
@@ -77,14 +92,25 @@ public class List extends GroupNode {
         
         for(int i = 0;i < captions.size(); i++) {
             options.add(i, new Button(captions.get(i), optionTexture));
-            options.get(i).showCaption();
+            options.get(i).showCaption();        
+            options.get(i).setValue(values.get(i));
+            
+            options.get(i).listener = new GuiListener() {              
+                public void onAction(int returnValue) {
+                    setValue(returnValue);
+                }
+            };
         }
         
         renderList();
     }
     
     public void renderList() {
-        if(scroll_y > options.size()) {
+        if(scroll_y < 0 ) {
+            scroll_y = 0;
+        }
+        
+        if(scroll_y > (options.size() - visibleOptions)) {
             scroll_y = options.size() - visibleOptions;
         }
         
@@ -96,29 +122,68 @@ public class List extends GroupNode {
         
         int s = 1;
         
+        clearOptionsRender();
+        
         for(int i = scroll_y; i < max; i++) {
            options.get(i).setLocalTranslation(0, downButton.getHeight() + (visibleOptions - s) * options.get(i).getHeight(), 0);
+           
+           if(options.get(i).getValue() == getValue()) {
+               System.out.println("highlight " + i);
+               options.get(i).showHighlight("Textures/block_cat_button_highlight.png", true);
+           }
+           
            attachChild(options.get(i));
+           System.out.println("show opt" + options.get(i).getValue());
            
            s++;
         }
     }
     
+    private void clearOptionsRender() {
+        for(int i = 0; i < options.size(); i++) {
+            if(hasChild(options.get(i))) {
+                detachChild(options.get(i));
+                options.get(i).showHighlight("", false);
+            }
+        }
+    }
+    
     public void setValue(int value) {
         this.value = value;
+        renderList();
+    }
+    
+    public int getValue() {
+        return value;
     }
     
     public void onAction() {
         if(listener != null) {
-            listener.onAction();
+            listener.onAction(getValue());
         }
     }
     
-    public void hideUp() {
+    public void showUpButton(boolean vis) {
+        if(hasChild(upButton) && !vis) {
+            detachChild(upButton);
+        }
         
+        if(!hasChild(upButton) && vis) {
+            attachChild(upButton);
+        }
     }
     
-    public void HideDown() {
+    public int getLength() {
+        return length;
+    }
+    
+    public void showDownButton(boolean vis) {
+        if(hasChild(downButton) && !vis) {
+            detachChild(downButton);
+        }
         
+        if(!hasChild(downButton) && vis) {
+            attachChild(downButton);
+        }
     }
 }

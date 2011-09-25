@@ -147,12 +147,16 @@ public class AbstractState extends AbstractAppState {
                     kinputs.detachListener();
                  }
                  
+                 if(isCursorActive()) {
+                     enableCursor(false);
+                 }
+                 
+                 unsetMouseActions(mactions);
+                 
                  //re-attach listener for global keys when needed
                  if(global_kinputs != null) {
                     global_kinputs.attachListener();
                  }
-                 
-                 unsetMouseActions(mactions);
              }
          }
      }

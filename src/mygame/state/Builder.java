@@ -116,6 +116,8 @@ public class Builder extends AbstractState{
         
         showCrossHair(true);
         setKeyListener(actionListener);
+        
+        getCamera().setMode(CameraMode.FLY_CLIP);
     }
     
     private void initGrid() {
@@ -151,7 +153,9 @@ public class Builder extends AbstractState{
     
     @Override
     public void onAttach() {
-        getCamera().setMode(CameraMode.FLY_CLIP);
+        if(isCursorActive()) {
+            guiMode = true;
+        }
     }
     
     @Override

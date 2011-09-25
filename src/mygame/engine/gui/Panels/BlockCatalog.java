@@ -21,11 +21,11 @@ import mygame.engine.nodes.GroupNode;
  * @author Dansion
  */
 public class BlockCatalog extends Panel {
-    private GroupNode preview = null;
     private BlockIndex catalog = null;
     private BlockInterface current = null;
     private Text currentName = new Text("Name :");
     private List catList = new List(5);
+    private BlockPreview preview = new BlockPreview();
     
     public BlockCatalog(BlockIndex catalog) {
         super("Catalog_panel", "Textures/block_catalog.png");
@@ -36,6 +36,10 @@ public class BlockCatalog extends Panel {
         AmbientLight light = new AmbientLight();
         light.setColor(new ColorRGBA(3, 3, 3, 1));      
         addLight(light);
+        
+        //Previewbox
+        preview.setLocalTranslation(getRightX() - 32 - preview.getWidth(), getTopY() - 32 - preview.getHeight(), 0);
+        attachChild(preview);
         
         //Block Information Labels
         currentName.setLocalTranslation(getLeftX() + 200, getTopY() - 32, 0);
@@ -52,21 +56,9 @@ public class BlockCatalog extends Panel {
         current.setAlpha(false);
         
         currentName.setText("Name :" + current.getName());
-        preview = current.getNode();
-        
-        preview.setQueueBucket(Bucket.Gui);
+        preview.setPreview(current.getNode());
         
         attachChild(preview);
-        
-        updatePreview();
-    }
-    
-    public void updatePreview() {
-        if(preview != null) {
-            System.out.println("updating preview");
-            preview.move(getRightX() - 96, getTopY() - 156, 0);
-            preview.setLocalScale(30, 30, 30);
-        }
     }
     
     public void update(float tpf) {

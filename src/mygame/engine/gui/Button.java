@@ -23,8 +23,9 @@ public class Button extends GroupNode implements GuiAction{
     public GuiListener listener = null;
     private Texture tex = null;
     private Text caption = null;
+    private int value = 0;
     
-    private static Picture bg = null;
+    private Picture bg = null;
     
     
     private Assets assets = Assets.getInstance();
@@ -68,7 +69,7 @@ public class Button extends GroupNode implements GuiAction{
     
     public void onAction() {
         if(listener != null) {
-            listener.onAction();
+            listener.onAction(value);
         }
     }
 
@@ -115,5 +116,31 @@ public class Button extends GroupNode implements GuiAction{
         caption.setLocalTranslation(12 , 26 , 0);
         
         attachChild(caption);
+    }
+    
+    public void setValue(int value) {
+        this.value = value;
+    }
+    
+    public int getValue() {
+        return value;
+    }
+    
+    public void showHighlight(String highLightTexture, boolean vis) {
+        Material m = new Material(assets.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+
+        if(vis) {
+            Texture t = assets.assetManager.loadTexture(highLightTexture);
+            m.setTexture("ColorMap", t);
+        }
+        else {
+            m.setTexture("ColorMap", tex);           
+        }
+        
+        m.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        bg.setWidth(getWidth());
+        bg.setHeight(getHeight());
+
+        bg.setMaterial(m);
     }
 }

@@ -9,5 +9,5 @@ package mygame.engine.gui.Interfaces;
  * @author Dansion
  */
 public interface GuiListener {
-    public void onAction();
+    public void onAction(int returnValue);
 }

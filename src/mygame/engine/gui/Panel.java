@@ -21,7 +21,6 @@ import mygame.helpers.Share;
  */
 public class Panel extends GroupNode{
     private String caption = null;
-    public GuiListener listener = null;
     
     private Picture panel = null;
     private Share shares = Share.getInstance();
@@ -72,7 +71,7 @@ public class Panel extends GroupNode{
             corr_y = t.getImage().getHeight() + 20;
         }
         
-        panel.setLocalTranslation((s_width / 2) - corr_x, s_height - corr_y, 0);
+        setLocalTranslation((s_width / 2) - corr_x, s_height - corr_y, 0);
         panel.setMaterial(m);
         
         attachChild(panel);
@@ -80,7 +79,7 @@ public class Panel extends GroupNode{
         panelNode = this;
         
         closeButton.listener = new GuiListener() {
-            public void onAction() {
+            public void onAction(int returnValue) {
                 getParent().detachChild(panelNode);
             }
         };
@@ -92,12 +91,6 @@ public class Panel extends GroupNode{
         
         
         setQueueBucket(Bucket.Gui);       
-    }
-    
-    public void onAction() {
-        if(listener != null) {
-            listener.onAction();
-        }
     }
     
     public boolean isActive() {      
@@ -133,12 +126,12 @@ public class Panel extends GroupNode{
         return height;
     }
     
-    public final void setWidth(int nwidth) {
+    public void setWidth(int nwidth) {
         width = nwidth;
         panel.setWidth(width);
     }
 
-    public final void setHeight(int nheight) {
+    public void setHeight(int nheight) {
         height = nheight;
         panel.setHeight(height);
     }
@@ -154,5 +147,15 @@ public class Panel extends GroupNode{
     @Override
     public final String getName() {
         return caption;
+    }
+    
+    public void showCloseButton(boolean vis) {
+        if(!vis && hasChild(closeButton)) {
+            detachChild(closeButton);
+        }
+        
+        if(vis && !hasChild(closeButton)) {
+            attachChild(closeButton);
+        }
     }
 }

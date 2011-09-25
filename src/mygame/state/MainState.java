@@ -92,7 +92,7 @@ public class MainState extends AbstractState{
         Button myButt = new Button("testButton");
         
         myButt.listener = new GuiListener() {
-            public void onAction() {
+            public void onAction(int returnValue) {
                 System.out.println("I am clicked");
             }
         };
