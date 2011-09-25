@@ -10,8 +10,4 @@ package mygame.engine.gui.Interfaces;
  */
 public interface GuiAction {
     public void onAction();
-    
-    public void setName(String name);
-    
-    public String getName();
 }

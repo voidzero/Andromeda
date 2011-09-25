@@ -16,4 +16,8 @@ public interface BlockIndex {
     public BlockInterface getBlock(String name);
     
     public String [] getCategory(String category);
+    
+    public String [] getCategoryList();
+    
+    public Integer [] getCategoryValueList();
 }

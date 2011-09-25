@@ -14,7 +14,9 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import mygame.engine.gui.Button;
+import mygame.engine.gui.Interfaces.GuiAction;
 import mygame.helpers.Share;
+import mygame.helpers.Various;
 
 /**
  *
@@ -41,14 +43,20 @@ public class Picking {
             String hit = results.getCollision(i).getGeometry().getName();
             System.out.println("* Collision #" + i);
             System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+            System.out.println(" Class  " + results.getCollision(i).getGeometry().getClass().getSimpleName());
             
             //Gui Code
             //==========================================================================================
             //Buttons
-            if("Button".equals(results.getCollision(i).getGeometry().getClass().getSimpleName())) {
-                Button bt = (Button) results.getCollision(i).getGeometry();
-                bt.onAction();
+            if("Picture".equals(results.getCollision(i).getGeometry().getClass().getSimpleName())) {
+                Node geom = results.getCollision(i).getGeometry().getParent();
+                
+                if(geom instanceof GuiAction) {
+                    GuiAction g = (GuiAction) geom;
+                    g.onAction();
+                }
             }
+
         }
         return null;
     }

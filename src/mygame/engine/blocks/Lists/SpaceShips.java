@@ -40,5 +40,26 @@ public class SpaceShips implements BlockIndex {
     public SpaceShips () {
         
     }
-
+    
+    public String [] getCategoryList () {
+        categories [] l = categories.values();
+        String [] res = new String[l.length];
+        
+        for(int i = 0; i< l.length; i++) {
+            res[i] = l[i].name();
+        }
+        
+        return res;
+    }
+    
+    public Integer [] getCategoryValueList() {
+        categories [] l = categories.values();
+        Integer [] res = new Integer[l.length];
+        
+        for(int i = 0; i< l.length; i++) {
+            res[i] = l[i].ordinal();
+        }
+        
+        return res;    
+    }
 }

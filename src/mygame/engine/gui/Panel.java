@@ -32,6 +32,8 @@ public class Panel extends GroupNode{
     private int corr_x = 0;
     private int corr_y = 0;
     
+    private int width, height;
+    
     public Panel(String caption) {
         this(caption, null);
     }
@@ -43,15 +45,15 @@ public class Panel extends GroupNode{
         
         setName(caption);
         
-        int sw = shares.appSettings.getWidth();
-        int sy = shares.appSettings.getHeight();
+        int s_width = shares.appSettings.getWidth();
+        int s_height = shares.appSettings.getHeight();
         
        Material m = new Material(assets.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         
         if(texture == null) {          
             m.setColor("Color", ColorRGBA.Blue);
-            panel.setWidth(32);
-            panel.setHeight(32);
+            setWidth(32);
+            setHeight(32);
         
             //@ TODO Button caption
             corr_x = 16;
@@ -63,16 +65,14 @@ public class Panel extends GroupNode{
             m.setTexture("ColorMap", t);
             m.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
             
-            int nh = (t.getImage().getHeight() * sw - 40) / t.getImage().getWidth();
+            setWidth(t.getImage().getWidth());
+            setHeight(t.getImage().getHeight());
             
-            panel.setWidth(sw - 40);
-            panel.setHeight(nh);
-            
-            corr_x = (sw - 40) / 2;
-            corr_y = nh + 20;
+            corr_x = t.getImage().getWidth() / 2;
+            corr_y = t.getImage().getHeight() + 20;
         }
         
-        panel.setLocalTranslation((sw / 2) - corr_x, sy - corr_y, 0);
+        panel.setLocalTranslation((s_width / 2) - corr_x, s_height - corr_y, 0);
         panel.setMaterial(m);
         
         attachChild(panel);
@@ -85,7 +85,7 @@ public class Panel extends GroupNode{
             }
         };
         
-        closeButton.setLocalTranslation((sw / 2) + corr_x - 34 , sy - 40, 0);
+        closeButton.setLocalTranslation(getRightX() - 34 , getTopY() - 24, 0);
         closeButton.setWidth(16);
         closeButton.setHeight(16);
         attachChild(closeButton);
@@ -108,9 +108,46 @@ public class Panel extends GroupNode{
             return false;
         }
     }
+    
+    public final float getLeftX() {
+        return panel.getLocalTranslation().x;
+    }
+    
+    public final float getRightX() {
+        return panel.getLocalTranslation().x + getWidth();
+    }
+    
+    public final float getBottomY() {
+        return panel.getLocalTranslation().y;
+    }
+    
+    public final float getTopY() {
+        return panel.getLocalTranslation().y + getHeight();
+    }
+    
+    public final int getWidth() {
+        return width;
+    }
+    
+    public final int getHeight() {
+        return height;
+    }
+    
+    public final void setWidth(int nwidth) {
+        width = nwidth;
+        panel.setWidth(width);
+    }
+
+    public final void setHeight(int nheight) {
+        height = nheight;
+        panel.setHeight(height);
+    }
+  
 
     @Override
     public final void setName(String name) {
+        super.setName(name);
+        
         caption = name;
     }
 

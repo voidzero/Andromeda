@@ -5,7 +5,8 @@
 package mygame.engine.gui;
 
 import com.jme3.font.BitmapFont;
-import java.awt.Font;
+import mygame.Assets;
+import mygame.helpers.GameConfig;
 
 /**
  *
@@ -13,9 +14,15 @@ import java.awt.Font;
  */
 
 public class Text extends com.jme3.font.BitmapText {
+    private final static Assets assets = Assets.getInstance();
     
+    private static BitmapFont font = assets.assetManager.loadFont("Interface/Fonts/Default.fnt");
     
-    public Text(BitmapFont myFont) {
-        super(myFont);
+    public Text(String caption) {
+        super(font);
+        
+        setSize(font.getCharSet().getRenderedSize());
+        setText(caption);
+        setColor(GameConfig.guiTextColor);
     }
 }
