@@ -17,7 +17,5 @@ public class GroupNode extends Node{
 
     public GroupNode(String name) {
         super(name);
-        
-        System.out.println("New GroupNode : " + name);
     }
 }

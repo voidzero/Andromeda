@@ -6,7 +6,6 @@ package mygame.engine.gui.Panels;
 
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import mygame.engine.blocks.BlockIndex;
@@ -14,7 +13,6 @@ import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.gui.List;
 import mygame.engine.gui.Panel;
 import mygame.engine.gui.Text;
-import mygame.engine.nodes.GroupNode;
 
 /**
  *
@@ -26,6 +24,7 @@ public class BlockCatalog extends Panel {
     private Text currentName = new Text("Name :");
     private List catList = new List(5);
     private BlockPreview preview = new BlockPreview();
+    private BlockSelectBar selectBar = new BlockSelectBar(14);
     
     public BlockCatalog(BlockIndex catalog) {
         super("Catalog_panel", "Textures/block_catalog.png");
@@ -49,6 +48,10 @@ public class BlockCatalog extends Panel {
         catList.setLocalTranslation(getLeftX(), getBottomY() + 32, 0);
         attachChild(catList);
         
+        //selectbar
+        selectBar.setLocalTranslation(getLeftX() + 160, getBottomY() + 32, 0);
+        attachChild(selectBar);
+        
     }
     
     public void setSelected(String name) {
@@ -56,7 +59,7 @@ public class BlockCatalog extends Panel {
         current.setAlpha(false);
         
         currentName.setText("Name :" + current.getName());
-        preview.setPreview(current.getNode());
+        preview.setPreview(current);
         
         attachChild(preview);
     }
@@ -72,5 +75,8 @@ public class BlockCatalog extends Panel {
         Integer [] values = this.catalog.getCategoryValueList();
         
         catList.setList(new ArrayList(Arrays.asList(captions)), new ArrayList(Arrays.asList(values)));
+        
+        catList.setValue(0);       
+        selectBar.setIndex(this.catalog.getCategoryBlocks(0));      
     }
 }

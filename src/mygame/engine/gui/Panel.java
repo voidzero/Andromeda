@@ -26,7 +26,10 @@ public class Panel extends GroupNode{
     private Share shares = Share.getInstance();
     private Assets assets = Assets.getInstance();
     private Button closeButton = new Button("Close window", "Textures/panel_close_button.png");
-    private GroupNode panelNode = this;
+    private GroupNode rootNode = this;
+    
+    private Texture bg = null;
+    private Texture bg_active = null;
     
     private int corr_x = 0;
     private int corr_y = 0;
@@ -58,17 +61,17 @@ public class Panel extends GroupNode{
             corr_x = 16;
             corr_y = 40;          
         }
-        else {      
-            Texture t = assets.assetManager.loadTexture(texture);
+        else {
+            bg = assets.assetManager.loadTexture(texture);
             
-            m.setTexture("ColorMap", t);
+            m.setTexture("ColorMap", bg);
             m.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
             
-            setWidth(t.getImage().getWidth());
-            setHeight(t.getImage().getHeight());
+            setWidth(bg.getImage().getWidth());
+            setHeight(bg.getImage().getHeight());
             
-            corr_x = t.getImage().getWidth() / 2;
-            corr_y = t.getImage().getHeight() + 20;
+            corr_x = bg.getImage().getWidth() / 2;
+            corr_y = bg.getImage().getHeight() + 20;
         }
         
         setLocalTranslation((s_width / 2) - corr_x, s_height - corr_y, 0);
@@ -76,11 +79,11 @@ public class Panel extends GroupNode{
         
         attachChild(panel);
         
-        panelNode = this;
+        rootNode = this;
         
         closeButton.listener = new GuiListener() {
             public void onAction(int returnValue) {
-                getParent().detachChild(panelNode);
+                getParent().detachChild(rootNode);
             }
         };
         
@@ -157,5 +160,26 @@ public class Panel extends GroupNode{
         if(vis && !hasChild(closeButton)) {
             attachChild(closeButton);
         }
+    }
+    
+    public void setActiveBackgroundTexture(String texture) {
+        bg_active = assets.assetManager.loadTexture(texture);
+    }
+    
+    public void showActive(boolean active) {
+        Material m = new Material(assets.assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        
+        if(active && bg_active != null) {
+            m.setTexture("ColorMap", bg_active);
+        }
+        else {
+             m.setTexture("ColorMap", bg);
+        }
+        
+        m.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        panel.setWidth(getWidth());
+        panel.setHeight(getHeight());
+
+        panel.setMaterial(m);
     }
 }

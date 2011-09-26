@@ -128,12 +128,10 @@ public class List extends GroupNode implements GuiAction {
            options.get(i).setLocalTranslation(0, downButton.getHeight() + (visibleOptions - s) * options.get(i).getHeight(), 0);
            
            if(options.get(i).getValue() == getValue()) {
-               System.out.println("highlight " + i);
                options.get(i).showHighlight("Textures/block_cat_button_highlight.png", true);
            }
            
            attachChild(options.get(i));
-           System.out.println("show opt" + options.get(i).getValue());
            
            s++;
         }

@@ -20,4 +20,6 @@ public interface BlockIndex {
     public String [] getCategoryList();
     
     public Integer [] getCategoryValueList();
+    
+    public BlockInterface [] getCategoryBlocks(int category_index);
 }

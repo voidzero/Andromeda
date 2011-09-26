@@ -25,13 +25,27 @@ public class SpaceShips implements BlockIndex {
         return null;
     }
 
+    public BlockInterface[] getCategoryBlocks(int category_index) {
+        categories [] t = categories.values();
+        String [] sres = getCategory(t[category_index].name());
+        
+        BlockInterface [] res = new BlockInterface[sres.length];
+        
+        for(int i = 0; i < sres.length; i++) {
+            System.out.println("getting" + sres[i]);
+            res[i] = getBlock(sres[i]);
+        }
+        
+        return res;
+    }
+
     public enum categories { Hulls, Floors, Inner_Walls, Doors, Ceilings, Engines};
 
     public BlockInterface getBlock(String name) {
         BlockInterface res = null;
-               
-        res = name.equals("LightAlloy") ? res = new LightAlloy(): null;
-        res = name.equals("LightAlloyWindowed") ? res = new LightAlloyWindowed(): null;
+        
+        if(name.equals("LightAlloy")) { res = new LightAlloy();}
+        if(name.equals("LightAlloyWindowed")) { res = new LightAlloyWindowed();}
         
         return res;
     }

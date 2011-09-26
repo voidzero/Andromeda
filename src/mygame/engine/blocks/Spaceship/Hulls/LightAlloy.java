@@ -4,8 +4,6 @@
  */
 package mygame.engine.blocks.Spaceship.Hulls;
 
-import com.jme3.asset.AssetManager;
-import mygame.Assets;
 import mygame.engine.blocks.Block;
 import mygame.engine.blocks.Blocks;
 
@@ -18,7 +16,6 @@ public class LightAlloy extends Blocks{
     public Block midBlock;
     public Block midBlock2;
     public Block lowBlock;
-    private final AssetManager assetManager = Assets.getInstance().assetManager;
     
     public LightAlloy() {
         super(4, "Light alloy");
