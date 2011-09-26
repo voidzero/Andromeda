@@ -8,7 +8,6 @@ import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.gui.Interfaces.GuiAction;
 import mygame.engine.gui.Interfaces.GuiListener;
 import mygame.engine.gui.Panel;
-import mygame.engine.nodes.GroupNode;
 
 /**
  *

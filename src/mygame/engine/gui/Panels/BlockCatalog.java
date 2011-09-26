@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import mygame.engine.blocks.BlockIndex;
 import mygame.engine.blocks.Interface.BlockInterface;
+import mygame.engine.gui.Interfaces.GuiListener;
 import mygame.engine.gui.List;
 import mygame.engine.gui.Panel;
 import mygame.engine.gui.Text;
@@ -50,8 +51,21 @@ public class BlockCatalog extends Panel {
         
         //selectbar
         selectBar.setLocalTranslation(getLeftX() + 160, getBottomY() + 32, 0);
+        selectBar.listener = new GuiListener() {
+            public void onAction(int returnValue) {
+                setSelected(selectBar.getCurrentBlock());             
+            }
+        };
+                
         attachChild(selectBar);
+    }
+    
+    public void setSelected(BlockInterface block) {
+        current = block;
+        current.setAlpha(false);
         
+        currentName.setText("Name :" + current.getName());
+        preview.setPreview(current);   
     }
     
     public void setSelected(String name) {
@@ -60,8 +74,10 @@ public class BlockCatalog extends Panel {
         
         currentName.setText("Name :" + current.getName());
         preview.setPreview(current);
-        
-        attachChild(preview);
+    }
+    
+    public BlockInterface getSelected() {
+        return selectBar.getCurrentBlock();
     }
     
     public void update(float tpf) {
@@ -77,6 +93,8 @@ public class BlockCatalog extends Panel {
         catList.setList(new ArrayList(Arrays.asList(captions)), new ArrayList(Arrays.asList(values)));
         
         catList.setValue(0);       
-        selectBar.setIndex(this.catalog.getCategoryBlocks(0));      
+        selectBar.setIndex(this.catalog.getCategoryBlocks(0));
+        
+        setSelected(selectBar.getCurrentBlock());
     }
 }

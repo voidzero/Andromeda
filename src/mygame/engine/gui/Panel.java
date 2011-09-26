@@ -57,7 +57,6 @@ public class Panel extends GroupNode{
             setWidth(32);
             setHeight(32);
         
-            //@ TODO Button caption
             corr_x = 16;
             corr_y = 40;          
         }

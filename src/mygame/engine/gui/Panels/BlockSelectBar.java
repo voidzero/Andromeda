@@ -4,8 +4,9 @@
  */
 package mygame.engine.gui.Panels;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mygame.engine.blocks.Interface.BlockInterface;
-import mygame.engine.blocks.Spaceship.Hulls.LightAlloy;
 import mygame.engine.gui.Interfaces.GuiAction;
 import mygame.engine.gui.Interfaces.GuiListener;
 import mygame.engine.nodes.GroupNode;
@@ -16,11 +17,13 @@ import mygame.engine.nodes.GroupNode;
  */
 public class BlockSelectBar extends GroupNode implements GuiAction {
     private int size;
-    private int value = -1;
+    private int value = 0;
+    private int scroll_x = 0;
     
-    private GuiListener listener = null;
     private BlockPreview [] buttons = null;
     private BlockInterface [] blocks = null;
+    
+    public GuiListener listener = null;
     
     public BlockSelectBar(int bar_size) {
         super("BlockSelectBar");
@@ -49,12 +52,36 @@ public class BlockSelectBar extends GroupNode implements GuiAction {
         updateBar();
     }
     
+    public BlockInterface getCurrentBlock() {
+        try {
+            return blocks[getValue()].getClass().newInstance();
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BlockSelectBar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BlockSelectBar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
     private void updateBar() {
         if(blocks != null) {
-            int max = blocks.length > size ? size : blocks.length;
+            scroll_x = scroll_x < blocks.length - size ? scroll_x : blocks.length - size;
+            
+            int max = scroll_x + size;
+            
+            max = max < blocks.length ? max : blocks.length;
             
             for(int i = 0; i < max; i++) {
                 buttons[i].setPreview(blocks[i]);
+                buttons[i].setValue(i);
+                
+                buttons[i].listener = new GuiListener() {
+
+                    public void onAction(int returnValue) {
+                        setValue(returnValue);
+                    }
+                };
             }
         }
     }
@@ -67,9 +94,20 @@ public class BlockSelectBar extends GroupNode implements GuiAction {
 
     public void setValue(int value) {
         this.value = value;
+        
+        clearActiveButtons();
+        
+        buttons[value].showActive(true);
+        onAction();
     }
 
     public int getValue() {
         return value;
+    }
+    
+    private void clearActiveButtons() {
+        for(int i = 0; i < buttons.length; i++) {
+            buttons[i].showActive(false);
+        }
     }
 }

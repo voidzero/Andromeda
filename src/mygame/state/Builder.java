@@ -11,6 +11,8 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mygame.engine.Camera.CameraMode;
 import mygame.engine.Picking;
 import mygame.engine.blocks.Block;
@@ -36,7 +38,6 @@ public class Builder extends AbstractState{
     private Picking pick = new Picking();
     private BlockSelection sel = null;
     
-    private String blockToPlace = "LightAlloyWindowed";
     private BObject obj_loaded = new BObject();
     private BlockCatalog catalogPanel = new BlockCatalog(obj_loaded.inventory);
     private boolean guiMode;
@@ -64,8 +65,9 @@ public class Builder extends AbstractState{
         actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 if("addBlock".equals(name) && keyPressed) {
-                    if(!guiMode) {
-                        GroupNode blb = obj_loaded.inventory.getBlock(blockToPlace).getNode();
+                    if(!guiMode) { 
+                        GroupNode blb = catalogPanel.getSelected().getNode();
+
                         rootNode.attachChild(blb);
                         blb.setLocalTranslation(checkCollision());
                     }
@@ -106,7 +108,6 @@ public class Builder extends AbstractState{
             }
         };
         guiNode.attachChild(catalogPanel);
-        catalogPanel.setSelected(blockToPlace);
         
         Blocks myBlock = new LightAlloyWindowed();
         sel = new BlockSelection(new BObject(), myBlock);
