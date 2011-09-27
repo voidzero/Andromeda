@@ -4,19 +4,14 @@
  */
 package mygame.engine;
 
-import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import mygame.engine.gui.Button;
 import mygame.engine.gui.Interfaces.GuiAction;
 import mygame.helpers.Share;
-import mygame.helpers.Various;
 
 /**
  *
@@ -41,8 +36,8 @@ public class Picking {
             float dist = results.getCollision(i).getDistance();
             Vector3f pt = results.getCollision(i).getContactPoint();
             String hit = results.getCollision(i).getGeometry().getName();
-            System.out.println("* Collision #" + i);
-            System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
+            //System.out.println("* Collision #" + i);
+            //System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
             System.out.println(" Class  " + results.getCollision(i).getGeometry().getClass().getSimpleName());
             
             //Gui Code

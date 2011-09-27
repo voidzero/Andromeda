@@ -8,6 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import mygame.Assets;
+import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.nodes.GroupNode;
 import mygame.engine.objects.BObject;
 
@@ -20,8 +21,7 @@ public class BlockSelection extends GroupNode {
     private Vector3f target_pos = null;
     
     private Blocks mask = null;
-    private Block mask_source = null;
-    private Blocks mask_source_blocks = null;
+    private BlockInterface mask_source = null;
     
     private AssetManager assets = Assets.getInstance().assetManager;
     private int size = 0;
@@ -33,16 +33,10 @@ public class BlockSelection extends GroupNode {
         this(object, new Block("blockSelection"));
     }
     
-    public BlockSelection(BObject object, Block mask) {
+    public BlockSelection(BObject object, BlockInterface mask) {
         super("blockSelection");
         
-        setBlockMask(mask);
-    }
-    
-    public BlockSelection(BObject object, Blocks mask) {
-        super("blockSelection");
-        
-        setBlocksMask(mask);
+        setMask(mask);
     }
     
     public void setPlacing(Vector3f position) {
@@ -61,31 +55,14 @@ public class BlockSelection extends GroupNode {
         }
     }
     
-    private void setBlockMask(Block mask_s) {
+    public void setMask(BlockInterface newMask) {
         clearMask();
-        
-        mask_source = mask_s;
-        
-        size = 1;
-        
-        mask = new Blocks(size, "blockselection");
-        
-        Block b2 = new Block();
-        b2.setQueueBucket(Bucket.Transparent);
-        b2.setBlockMaterial(sel_allowed);
-        mask.addBlock(b2, 0, 0, 0);
-    }
-    
-    public void setBlocksMask(Blocks mask_s) {
-        clearMask();
-        
-        mask_source_blocks = mask_s;
        
-        size = mask_s.getBlockAmount();
+        size = newMask.amount();
         mask = new Blocks(size, "blockselection");
         
         for(int i = 0; i<size; i++) {
-            Block b = mask_s.getBlock(i);
+            Block b = newMask.getBlock(i);
             Block b2 = new Block("blockSelection");
             b2.setBlockMaterial(sel_allowed);
             b2.setQueueBucket(Bucket.Translucent);
@@ -96,12 +73,9 @@ public class BlockSelection extends GroupNode {
     }
     
     public void clearMask() {
-        this.mask = null;
+        detachAllChildren();
         
-        updateMask();
-        
-        mask_source = null;
-        mask_source_blocks = null;
+        mask = null;
     }
     
     public void updateMask() {

@@ -11,8 +11,6 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mygame.engine.Camera.CameraMode;
 import mygame.engine.Picking;
 import mygame.engine.blocks.Block;
@@ -20,8 +18,8 @@ import mygame.engine.blocks.BlockSelection;
 import mygame.engine.blocks.Blocks;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloyWindowed;
 import mygame.engine.geom.Grid;
+import mygame.engine.gui.Interfaces.GuiListener;
 import mygame.engine.gui.Panels.BlockCatalog;
-import mygame.engine.nodes.GroupNode;
 import mygame.engine.objects.BObject;
 
 /**
@@ -51,6 +49,7 @@ public class Builder extends AbstractState{
         super(parent);
         
         this.size_x = size_x;
+        this.size_y = size_y;
         this.size_z = size_z;
         
         String [] keyActions = {"guiMode"};
@@ -66,10 +65,7 @@ public class Builder extends AbstractState{
             public void onAction(String name, boolean keyPressed, float tpf) {
                 if("addBlock".equals(name) && keyPressed) {
                     if(!guiMode) { 
-                        GroupNode blb = catalogPanel.getSelected().getNode();
-
-                        rootNode.attachChild(blb);
-                        blb.setLocalTranslation(checkCollision());
+                        obj_loaded.addBlock(catalogPanel.getSelected(), checkCollision());
                     }
                     else {
                         if(isCursorActive()) {
@@ -107,12 +103,20 @@ public class Builder extends AbstractState{
                 }
             }
         };
+        
+        //Block Catalog Panel
         guiNode.attachChild(catalogPanel);
         
-        Blocks myBlock = new LightAlloyWindowed();
-        sel = new BlockSelection(new BObject(), myBlock);
-        rootNode.attachChild(sel);
+        catalogPanel.listener = new GuiListener() {
+            public void onAction(int returnValue) {
+                sel.setMask(catalogPanel.getSelected());
+            }
+        };
         
+        Blocks myBlock = new LightAlloyWindowed();
+        sel = new BlockSelection(obj_loaded, myBlock);
+        rootNode.attachChild(sel);
+        rootNode.attachChild(obj_loaded);
         initGrid();
         
         showCrossHair(true);

@@ -60,7 +60,7 @@ public class Engine {
         
         myBlock5.setLocalRotation(rot);
             
-        rootNode.attachChild(myBlock);
+        //rootNode.attachChild(myBlock);
         rootNode.attachChild(myBlock2);
         rootNode.attachChild(myBlock3);
         rootNode.attachChild(myBlock4);

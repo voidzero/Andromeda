@@ -7,15 +7,19 @@ package mygame.engine.blocks;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Mesh;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.TangentBinormalGenerator;
 import mygame.Assets;
+import mygame.engine.blocks.Interface.BlockInterface;
+import mygame.engine.nodes.GroupNode;
 import mygame.engine.nodes.RenderNode;
 import mygame.engine.objects.BObject;
 
@@ -23,12 +27,13 @@ import mygame.engine.objects.BObject;
  *
  * @author Dansion
  */
-public class Block extends RenderNode {
+public class Block extends RenderNode implements BlockInterface {
     public boolean isSolid;
     public long strength = 100;
     public long health;
     public float size_x = 1.0f, size_y = 1.0f, size_z = 1.0f;
     public int x = 0, y = 0, z = 0;
+    private GroupNode node = new GroupNode();
     
     public Vector3f [] normals = new Vector3f[24];
     public Vector3f [] vertices = new Vector3f[24];
@@ -49,6 +54,8 @@ public class Block extends RenderNode {
         health = strength;
         
         createBlock();
+        
+        node.attachChild(this);
     }
     
     public void size(float x, float y, float z) {
@@ -266,5 +273,29 @@ public class Block extends RenderNode {
         }
         
         return target;
+    }
+
+    public GroupNode getNode() {
+        return node;
+    }
+
+    public void setAlpha(boolean alpha) {   
+        if(alpha) {
+            getMaterial().getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        }
+        else {
+            Material mat = getMaterial();
+            mat.getAdditionalRenderState().setBlendMode(BlendMode.Off);
+            setMaterial(mat);
+            setQueueBucket(Bucket.Inherit);
+        }
+    }
+    
+    public int amount() {
+        return 1;
+    }
+    
+    public Block getBlock(int index) {
+        return this;
     }
 }

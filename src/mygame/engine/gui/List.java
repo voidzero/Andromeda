@@ -149,6 +149,8 @@ public class List extends GroupNode implements GuiAction {
     public void setValue(int value) {
         this.value = value;
         renderList();
+        
+        onAction();
     }
     
     public int getValue() {

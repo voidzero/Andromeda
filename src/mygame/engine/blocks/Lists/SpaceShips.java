@@ -5,6 +5,7 @@
 package mygame.engine.blocks.Lists;
 
 import mygame.engine.blocks.BlockIndex;
+import mygame.engine.blocks.Floors.FloorCarpet01;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloy;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloyWindowed;
@@ -20,6 +21,11 @@ public class SpaceShips implements BlockIndex {
                 String [] res = {"LightAlloy", "LightAlloyWindowed"};
                 return res;
             }
+            case Floors: {
+                String [] res = {"FloorCarpet01"};
+                return res;
+            }    
+            
         }
         
         return null;
@@ -29,14 +35,18 @@ public class SpaceShips implements BlockIndex {
         categories [] t = categories.values();
         String [] sres = getCategory(t[category_index].name());
         
-        BlockInterface [] res = new BlockInterface[sres.length];
-        
-        for(int i = 0; i < sres.length; i++) {
-            System.out.println("getting" + sres[i]);
-            res[i] = getBlock(sres[i]);
+        if(sres != null) {
+            BlockInterface [] res = new BlockInterface[sres.length];
+
+            for(int i = 0; i < sres.length; i++) {
+                System.out.println("getting" + sres[i]);
+                res[i] = getBlock(sres[i]);
+            }
+
+            return res;
         }
         
-        return res;
+        return null;
     }
 
     public enum categories { Hulls, Floors, Inner_Walls, Doors, Ceilings, Engines};
@@ -46,6 +56,7 @@ public class SpaceShips implements BlockIndex {
         
         if(name.equals("LightAlloy")) { res = new LightAlloy();}
         if(name.equals("LightAlloyWindowed")) { res = new LightAlloyWindowed();}
+        if(name.equals("FloorCarpet01")) { res = new FloorCarpet01();}
         
         return res;
     }

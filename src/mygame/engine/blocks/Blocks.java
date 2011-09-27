@@ -113,4 +113,8 @@ public class Blocks extends GroupNode implements BlockInterface {
             }
         }
     }
+    
+    public int amount() {
+        return getBlockAmount();
+    }
 }

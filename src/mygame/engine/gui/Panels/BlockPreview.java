@@ -4,6 +4,8 @@
  */
 package mygame.engine.gui.Panels;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.gui.Interfaces.GuiAction;
 import mygame.engine.gui.Interfaces.GuiListener;
@@ -27,14 +29,22 @@ public class BlockPreview extends Panel implements GuiAction {
     }
     
     public void setPreview(BlockInterface block) {
-        preview = block;
-        preview.setAlpha(false);
-        preview.getNode().setLocalTranslation(getWidth() / 2, 4, 0);
-        preview.getNode().setLocalScale(30, 30, 30);
-        
-        attachChild(preview.getNode());
-        
-        rescalePreview();
+        try {
+            clearPreview();
+            
+            preview = block.getClass().newInstance();
+            preview.setAlpha(false);
+            preview.getNode().setLocalTranslation(getWidth() / 2, 4, 0);
+            preview.getNode().setLocalScale(30, 30, 30);
+            
+            attachChild(preview.getNode());
+            
+            rescalePreview();
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BlockPreview.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BlockPreview.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void clearPreview() {

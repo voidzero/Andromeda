@@ -4,6 +4,7 @@
  */
 package mygame.engine.blocks.Interface;
 
+import mygame.engine.blocks.Block;
 import mygame.engine.nodes.GroupNode;
 
 /**
@@ -16,4 +17,8 @@ public interface BlockInterface {
     public GroupNode getNode();
     
     public void setAlpha(boolean alpha);
+    
+    public int amount();
+    
+    public Block getBlock(int index);
 }
