@@ -4,6 +4,7 @@
  */
 package mygame.engine.blocks.Interface;
 
+import com.jme3.math.Vector3f;
 import mygame.engine.blocks.Block;
 import mygame.engine.nodes.GroupNode;
 

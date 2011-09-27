@@ -235,6 +235,26 @@ public class Block extends RenderNode implements BlockInterface {
         
     }
     
+    public static Vector3f vectorToGrid(Vector3f vector) {   
+        for(int i = 0;i<3;i++) {
+            float pv = vector.get(i);
+            
+            if(i == 1) {
+                pv = pv - 0.5f;
+            }
+            //end correction
+            
+            if(pv < 0) {  
+                pv = ((pv % 1) <= -0.5) ? FastMath.floor(pv) : FastMath.ceil(pv);
+            }
+            else {
+                pv = ((pv % 1) <= 0.5) ? FastMath.floor(pv) : FastMath.ceil(pv);
+            }
+        }
+        
+        return vector;
+    }
+    
     public static Vector3f blockCollisionToGrid(CollisionResult face) {
         Vector3f contact = face.getContactPoint();
         Vector3f normal = face.getContactNormal();       
@@ -256,14 +276,21 @@ public class Block extends RenderNode implements BlockInterface {
                 target.set(i, pf);
                 continue;
             }
-
+            
+            //y-axis corrections
+            if(i == 1) {
+                pf = pf - 0.5f;
+            }
+            //end correction
+            
             if(pf < 0) {  
                 pf = ((pf % 1) <= -0.5) ? FastMath.floor(pf) : FastMath.ceil(pf);
                 pf = pf + normal.get(i);
             }
             else {
                 pf = ((pf % 1) <= 0.5) ? FastMath.floor(pf) : FastMath.ceil(pf);
-            }  
+            }
+            
                        
 //            System.out.println(contact.get(i));
 //            System.out.println(pf);

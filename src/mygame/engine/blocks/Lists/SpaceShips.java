@@ -39,7 +39,6 @@ public class SpaceShips implements BlockIndex {
             BlockInterface [] res = new BlockInterface[sres.length];
 
             for(int i = 0; i < sres.length; i++) {
-                System.out.println("getting" + sres[i]);
                 res[i] = getBlock(sres[i]);
             }
 

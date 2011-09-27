@@ -64,7 +64,7 @@ public class Builder extends AbstractState{
         actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 if("addBlock".equals(name) && keyPressed) {
-                    if(!guiMode) { 
+                    if(!guiMode && !sel.isBlocked()) { 
                         obj_loaded.addBlock(catalogPanel.getSelected(), checkCollision());
                     }
                     else {
@@ -176,8 +176,7 @@ public class Builder extends AbstractState{
                 if(col.getGeometry().getName() != null) {
                     if(col.getGeometry().getName().contains("blockSelection") == false) {
                         Vector3f newBlockPos = Block.blockCollisionToGrid(col);
-
-                        newBlockPos.setY(floorHeight);
+                        
                         return newBlockPos;
                     }
                 }

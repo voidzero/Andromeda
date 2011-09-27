@@ -9,8 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.engine.blocks.Block;
 import mygame.engine.blocks.BlockIndex;
-import mygame.engine.blocks.BlockIndex.categories;
-import mygame.engine.blocks.Blocks;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Lists.SpaceShips;
 import mygame.engine.nodes.GroupNode;
@@ -35,6 +33,7 @@ public class BObject extends GroupNode{
             
             newBlock.getNode().setLocalTranslation(position);
             attachChild(newBlock.getNode());
+            
         } catch (InstantiationException ex) {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {

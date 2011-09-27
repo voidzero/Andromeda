@@ -1,13 +1,14 @@
 Material default_grid : Common/MatDefs/Misc/Unshaded.j3md {
      MaterialParameters {
-        SeparateTexCoord : false
         ColorMap : Textures/blockselect_02.png
+        SeparateTexCoord : false
      }
     AdditionalRenderState {
-      DepthTest Off
-      DepthWrite Off
       FaceCull Off
-      Wireframe On
-        Blend Alpha
+      DepthWrite Off
+      Blend Alpha
+      DepthTest On
     }
 }
+
+

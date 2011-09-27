@@ -1,7 +1,8 @@
 Material My Material : Common/MatDefs/Light/Lighting.j3md {
      MaterialParameters {
         DiffuseMap : Textures/floor_carpet_01.png
-        Shininess : 100.0
+        Shininess : 0.0
+        PackedNormalParallax : false
      }
     AdditionalRenderState {
     }

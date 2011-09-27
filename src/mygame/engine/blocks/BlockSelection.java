@@ -5,6 +5,7 @@
 package mygame.engine.blocks;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResults;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import mygame.Assets;
@@ -25,6 +26,7 @@ public class BlockSelection extends GroupNode {
     
     private AssetManager assets = Assets.getInstance().assetManager;
     private int size = 0;
+    private boolean isBlocked = false;
     
     private String sel_allowed = "Materials/block_select_01.j3m";
     private String sel_denied = "Materials/block_select_02.j3m";
@@ -36,23 +38,51 @@ public class BlockSelection extends GroupNode {
     public BlockSelection(BObject object, BlockInterface mask) {
         super("blockSelection");
         
+        target = object;
         setMask(mask);
     }
     
     public void setPlacing(Vector3f position) {
-        target_pos = position;
-        setLocalTranslation(target_pos);
+        if(position != null && mask != null) {
+            target_pos = position;
+
+            updatePlacing();
+        }
     }
     
     private void updatePlacing() {
         setLocalTranslation(target_pos);
+        
+        isBlocked = false;
+        //check if mask intersects other blocks
+        CollisionResults results = new CollisionResults();
+
+        for(int mb = 0; mb < mask.amount(); mb++) {
+            Vector3f b_loc = new Vector3f(mask.getBlock(mb).getLocalTranslation());
+            b_loc.addLocal(getLocalTranslation());
+            target.collideWith(getWorldBound(), results);
+
+            for(int i = 0; i < results.size(); i++) {
+                if(results.getCollision(i).getGeometry() instanceof BlockInterface) {
+                    BlockInterface block = (BlockInterface) results.getCollision(i).getGeometry();
+                    Vector3f loc = block.getBlock(0).getWorldTranslation();                    
+
+                    if( loc.equals(b_loc) ) {
+                       mask.getBlock(mb).setBlockMaterial(sel_denied);
+                       isBlocked = true;
+                       break;
+                    }
+                    else {
+                       mask.getBlock(mb).setBlockMaterial(sel_allowed);
+                    }
+                }
+            }
+        }
     }
     
     public void update() {
         updateMask();
-        if(target_pos != null && mask != null) {
-            updatePlacing();
-        }
+        
     }
     
     public void setMask(BlockInterface newMask) {
@@ -85,5 +115,9 @@ public class BlockSelection extends GroupNode {
         else {
             attachChild(mask);
         }
+    }
+    
+    public boolean isBlocked() {
+        return isBlocked;
     }
 }
