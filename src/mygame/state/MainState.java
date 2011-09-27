@@ -27,25 +27,22 @@ public class MainState extends AbstractState{
         String [] mainActions = {"infoToggle"  , "fullScreenToggle", "mouseToggle"};
         
         int [] globalTriggers =   {KeyInput.KEY_B};
-        String [] globalActions = {"buildToggle"};
+        String [] globalActions = {"buildToggle"};    
+        
+        String [] mouseActions = {"leftClick"};
+        int [] mouseTriggers =   {MouseInput.BUTTON_LEFT};
         
         setKeyInputs("Main", mainTriggers, mainActions);
         setGlobalKeyInputs("Main_Global", globalTriggers, globalActions);
-        
-        String [] mouseActions = {"leftClick"};
-        int [] mouseTriggers =   {MouseInput.BUTTON_LEFT};   
-        
         setMouseActions(mouseActions, mouseTriggers);
-
+                
         actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
-                if("infoToggle".equals(name) && keyPressed) {
-                    System.out.println("switching info");
-                }
+                if("infoToggle".equals(name) && keyPressed) {}
 
                 if("leftClick".equals(name)  && keyPressed) {
                     if(isCursorActive()) {
-                        CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
+                        getCursor().pickGui(guiNode, guiCam);
                     }
                 }
 
@@ -69,9 +66,7 @@ public class MainState extends AbstractState{
                     }
                 }
                 
-                if("fullScreenToggle".equals(name) && keyPressed) {
-                    System.out.println("Fullscreen");
-                }
+                if("fullScreenToggle".equals(name) && keyPressed) {}
                 
                 if("mouseToggle".equals(name) && keyPressed) {
                     if(isCursorActive()) {
@@ -84,20 +79,11 @@ public class MainState extends AbstractState{
             }
         };
         
+        setKeyListener(actionListener);
+        
         enableCamera(true);
         enableCursor(true);
         enableGuiCam(true);
-        setKeyListener(actionListener);
-
-        Button myButt = new Button("testButton");
-        
-        myButt.listener = new GuiListener() {
-            public void onAction(int returnValue) {
-                System.out.println("I am clicked");
-            }
-        };
-        
-        guiNode.attachChild(myButt);
     }
        
     @Override

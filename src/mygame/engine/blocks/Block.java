@@ -263,8 +263,13 @@ public class Block extends RenderNode implements BlockInterface {
         for(int i = 0;i<3;i++) {
             float pf = contact.get(i);
             
-            //System.out.println(i); 
+             //y-axis corrections
+            if(i == 1) {
+                pf = pf - 0.5f;
+            }
+            //end correction
             
+            //positioning through normal
             if(normal.get(i) < 0) {
                 pf = FastMath.floor(pf);
                 target.set(i, pf);
@@ -277,12 +282,7 @@ public class Block extends RenderNode implements BlockInterface {
                 continue;
             }
             
-            //y-axis corrections
-            if(i == 1) {
-                pf = pf - 0.5f;
-            }
-            //end correction
-            
+            //positioning through coords
             if(pf < 0) {  
                 pf = ((pf % 1) <= -0.5) ? FastMath.floor(pf) : FastMath.ceil(pf);
                 pf = pf + normal.get(i);
@@ -290,11 +290,6 @@ public class Block extends RenderNode implements BlockInterface {
             else {
                 pf = ((pf % 1) <= 0.5) ? FastMath.floor(pf) : FastMath.ceil(pf);
             }
-            
-                       
-//            System.out.println(contact.get(i));
-//            System.out.println(pf);
-//            System.out.println(normal.get(i)); 
             
             target.set(i, pf);
         }

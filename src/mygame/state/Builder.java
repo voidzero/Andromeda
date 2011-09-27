@@ -30,8 +30,6 @@ public class Builder extends AbstractState{
     private int size_x = 30;
     private int size_y = 20;
     private int size_z = 60;
-    private int roomheight = 4;
-    private int floorHeight = 0;
     
     private Picking pick = new Picking();
     private BlockSelection sel = null;
@@ -52,8 +50,8 @@ public class Builder extends AbstractState{
         this.size_y = size_y;
         this.size_z = size_z;
         
-        String [] keyActions = {"guiMode"};
-        int [] keyTriggers = {KeyInput.KEY_TAB};
+        String [] keyActions = {"guiMode"     , "floorDown"          , "floorUp"};
+        int [] keyTriggers = {KeyInput.KEY_TAB, KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET};
         
         String [] mouseActions = {"addBlock",             "removeBlock"};
         int [] mouseTriggers =   {MouseInput.BUTTON_LEFT, MouseInput.BUTTON_RIGHT};
@@ -72,6 +70,16 @@ public class Builder extends AbstractState{
                             CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
                         }
                     }
+                }
+                
+                if("floorUp".equals(name) && keyPressed) {
+                    obj_loaded.setCurrentFloor(obj_loaded.getCurrentFloor() + 1);
+                    grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
+                }
+                
+                if("floorDown".equals(name) && keyPressed) {
+                    obj_loaded.setCurrentFloor(obj_loaded.getCurrentFloor() - 1);
+                    grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
                 }
                 
                 if("guiMode".equals(name) && keyPressed) {

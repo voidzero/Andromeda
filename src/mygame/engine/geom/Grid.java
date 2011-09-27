@@ -132,4 +132,13 @@ public class Grid extends RenderNode {
        
         initGrid();   
     }
+    
+    public void setFloor(int floor_height, int floor) {
+        int y = floor * floor_height - floor_height;
+        
+        Vector3f pos = getLocalTranslation();
+        pos.y = y;
+        
+        setLocalTranslation(pos);
+    }
 }

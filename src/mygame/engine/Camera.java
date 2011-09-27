@@ -60,7 +60,7 @@ public class Camera extends com.jme3.renderer.Camera {
         lookAt(new Vector3f(0f, 1.8f, 0f), Vector3f.UNIT_Y);
 
         setViewPort(0.0f, 1.0f, 0.0f, 1.0f);
-        setFrustumPerspective(45f, (float) cwidth / cheight, 0.01f, 1000f);
+        setFrustumPerspective(75f, (float) cwidth / cheight, 0.01f, 1000f);
         
         setName(name);
         

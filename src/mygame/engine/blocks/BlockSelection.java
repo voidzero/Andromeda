@@ -60,20 +60,26 @@ public class BlockSelection extends GroupNode {
         for(int mb = 0; mb < mask.amount(); mb++) {
             Vector3f b_loc = new Vector3f(mask.getBlock(mb).getLocalTranslation());
             b_loc.addLocal(getLocalTranslation());
+            
+            mask.getBlock(mb).setBlockMaterial(sel_allowed);
+            
+            if(b_loc.y >= target.getCurrentFloorY() + target.getFloorHeight()  || b_loc.y < target.getCurrentFloorY()) {
+               mask.getBlock(mb).setBlockMaterial(sel_denied);
+               isBlocked = true;
+               continue;
+            }
+            
             target.collideWith(getWorldBound(), results);
-
+            
             for(int i = 0; i < results.size(); i++) {
                 if(results.getCollision(i).getGeometry() instanceof BlockInterface) {
                     BlockInterface block = (BlockInterface) results.getCollision(i).getGeometry();
                     Vector3f loc = block.getBlock(0).getWorldTranslation();                    
 
-                    if( loc.equals(b_loc) ) {
+                    if( loc.equals(b_loc)) {
                        mask.getBlock(mb).setBlockMaterial(sel_denied);
                        isBlocked = true;
                        break;
-                    }
-                    else {
-                       mask.getBlock(mb).setBlockMaterial(sel_allowed);
                     }
                 }
             }

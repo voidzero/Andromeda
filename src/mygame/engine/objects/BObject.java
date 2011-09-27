@@ -20,6 +20,10 @@ import mygame.engine.nodes.GroupNode;
 public class BObject extends GroupNode{
     public ArrayList<BlockInterface> blocks = new ArrayList<BlockInterface>();
     public BlockIndex inventory = new SpaceShips();
+     
+    private int floorHeight = 4;
+    private int currentFloor = 1;
+    private int floorAmount = 3;
     
     public BObject() {
         super();
@@ -43,6 +47,30 @@ public class BObject extends GroupNode{
     
     public Block getBlock(float x, float y, float z) {
         return null;
+    }
+    
+    public int getFloorHeight() {
+        return floorHeight;
+    }
+    
+    public void setCurrentFloor(int floor) {
+        currentFloor = floor;
+        
+        if(currentFloor > floorAmount) {
+            currentFloor = floorAmount;
+        }
+        
+        if( currentFloor < 1 ) {
+            currentFloor = 1;
+        }
+    }
+    
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
+    
+    public int getCurrentFloorY() {
+        return getCurrentFloor() * getFloorHeight() - getFloorHeight();
     }
     
     public void loadInEditor() {
