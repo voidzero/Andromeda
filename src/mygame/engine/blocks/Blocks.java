@@ -6,6 +6,7 @@ package mygame.engine.blocks;
 
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.nodes.GroupNode;
@@ -116,5 +117,9 @@ public class Blocks extends GroupNode implements BlockInterface {
     
     public int amount() {
         return getBlockAmount();
+    }
+    
+    public Vector3f getLocation() {
+        return this.getLocalTranslation();
     }
 }

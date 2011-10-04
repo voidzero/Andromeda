@@ -4,6 +4,11 @@
  */
 package mygame.engine.blocks;
 
+import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.Node;
+import mygame.Assets;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.nodes.GroupNode;
 
@@ -11,23 +16,35 @@ import mygame.engine.nodes.GroupNode;
  *
  * @author Dansion
  */
-public class CustomBlock implements BlockInterface {
+public class CustomBlock extends GroupNode implements BlockInterface {
     private String name = null;
+    private Node model;
     
-    public void setName(String new_name) {
-        name = new_name;
+    public CustomBlock() {
+        super("CustomBlock");
     }
     
-    public String getName() {
-        return name;
+    public void loadBlenderModel(String fname) {
+        setName(fname);
+        
+        model = (Node) Assets.getInstance().assetManager.loadModel(fname);
+        
+        //blender acale fix @TODO why do I have to rescale blender models?? 
+        model.scale(1.3f);
+        
+        this.attachChild(model);
     }
 
     public GroupNode getNode() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this;
     }
 
     public void setAlpha(boolean alpha) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(alpha) {
+        }
+        else {
+            this.setQueueBucket(Bucket.Inherit);
+        }
     }
 
     public int amount() {
@@ -35,7 +52,10 @@ public class CustomBlock implements BlockInterface {
     }
 
     public Block getBlock(int index) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+        return new Block();
+    } 
     
+    public Vector3f getLocation() {
+        return this.getLocalTranslation();
+    }
 }

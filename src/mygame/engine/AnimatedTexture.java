@@ -15,6 +15,7 @@ import com.jme3.scene.control.Control;
 import com.jme3.texture.Texture;
 import java.io.IOException;
 import mygame.Assets;
+import mygame.helpers.Share;
 
 /**
  *
@@ -26,7 +27,6 @@ public class AnimatedTexture implements Control {
     private AnimMap map;
     private Material mat;
     private Texture texture;
-    private Spatial spatial;
     private int fps = 15;
     private int frame = 0, frames = 59;
     private float time = 0;
@@ -40,6 +40,8 @@ public class AnimatedTexture implements Control {
         map = new AnimMap(mapFile);
         
         texture = Assets.getInstance().assetManager.loadTexture(textureFile);
+        
+        Share.getInstance().rootNode.addControl(this);
     }  
     
     public void update(float tpf) {
@@ -61,20 +63,22 @@ public class AnimatedTexture implements Control {
         return texture;
     }
     
+    public Material getMaterial() {
+        return mat;
+    }
+    
     public Control cloneForSpatial(Spatial spatial) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void setSpatial(Spatial spatial) {
-        this.spatial = spatial;
-    }
+    public void setSpatial(Spatial spatial) {}
 
     public void setEnabled(boolean enabled) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public boolean isEnabled() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true;
     }
 
 

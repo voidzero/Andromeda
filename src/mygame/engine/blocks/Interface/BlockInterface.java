@@ -13,6 +13,8 @@ import mygame.engine.nodes.GroupNode;
  * @author Dansion
  */
 public interface BlockInterface {
+    public Integer x = 0;
+    
     public String getName();
     
     public GroupNode getNode();
@@ -22,4 +24,6 @@ public interface BlockInterface {
     public int amount();
     
     public Block getBlock(int index);
+    
+    public Vector3f getLocation();
 }

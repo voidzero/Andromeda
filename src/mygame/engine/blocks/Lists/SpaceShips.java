@@ -9,6 +9,7 @@ import mygame.engine.blocks.Floors.FloorCarpet01;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloy;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloyWindowed;
+import mygame.engine.blocks.Systems.PowerConduit;
 
 /**
  *
@@ -24,7 +25,12 @@ public class SpaceShips implements BlockIndex {
             case Floors: {
                 String [] res = {"FloorCarpet01"};
                 return res;
-            }    
+            }
+            
+            case Engineering: {
+                String [] res = {"PowerConduit"};
+                return res;
+            }
             
         }
         
@@ -48,7 +54,7 @@ public class SpaceShips implements BlockIndex {
         return null;
     }
 
-    public enum categories { Hulls, Floors, Inner_Walls, Doors, Ceilings, Engines};
+    public enum categories { Hulls, Floors, Inner_Walls, Doors, Ceilings, Engineering};
 
     public BlockInterface getBlock(String name) {
         BlockInterface res = null;
@@ -56,6 +62,7 @@ public class SpaceShips implements BlockIndex {
         if(name.equals("LightAlloy")) { res = new LightAlloy();}
         if(name.equals("LightAlloyWindowed")) { res = new LightAlloyWindowed();}
         if(name.equals("FloorCarpet01")) { res = new FloorCarpet01();}
+        if(name.equals("PowerConduit")) { res = new PowerConduit();}
         
         return res;
     }

@@ -4,7 +4,6 @@
  */
 package mygame.engine.blocks;
 
-import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -318,5 +317,9 @@ public class Block extends RenderNode implements BlockInterface {
     
     public Block getBlock(int index) {
         return this;
+    }
+    
+    public Vector3f getLocation() {
+        return this.getLocalTranslation();
     }
 }

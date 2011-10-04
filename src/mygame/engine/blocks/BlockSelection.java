@@ -74,7 +74,7 @@ public class BlockSelection extends GroupNode {
             for(int i = 0; i < results.size(); i++) {
                 if(results.getCollision(i).getGeometry() instanceof BlockInterface) {
                     BlockInterface block = (BlockInterface) results.getCollision(i).getGeometry();
-                    Vector3f loc = block.getBlock(0).getWorldTranslation();                    
+                    Vector3f loc = block.getBlock(0).getLocation();                    
 
                     if( loc.equals(b_loc)) {
                        mask.getBlock(mb).setBlockMaterial(sel_denied);
