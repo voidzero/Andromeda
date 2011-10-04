@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class AnimMap {
     private Vector2f [] offset_array;
-    private int length = 0;
+    private int length, fps, width, height;
     
     public AnimMap(String mapFile) {
         BufferedReader in = null;
@@ -33,12 +33,18 @@ public class AnimMap {
                 
                 //first line of map file = length / frames
                 if(length == 0) {
-                    length = Integer.parseInt(str);
+                    length = Integer.parseInt(strArr[0]);
+                    fps = Integer.parseInt(strArr[1]);
+                    width = Integer.parseInt(strArr[2]);
+                    height = Integer.parseInt(strArr[3]);
                     offset_array = new Vector2f[length];
                 }
                 else {                      
-                    String [] coords = strArr[1].split(" ");                
-                    offset_array[i] = new Vector2f(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));               
+                    String [] coords = strArr[1].split(" ");   
+                    float x = 1.0000f * Integer.parseInt(coords[0]) / width;
+                    float y = -1.0000f * Integer.parseInt(coords[1]) / height;
+                    offset_array[i] = new Vector2f(x, y);               
+               
                     i++;
                 }
             }
@@ -57,6 +63,10 @@ public class AnimMap {
     
     public Vector2f getUVFrameOffset(int frame) {
         return offset_array[frame];
+    }
+    
+    public int getFps() {
+        return fps;
     }
     
     public int length() {

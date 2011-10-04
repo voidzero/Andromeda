@@ -2,12 +2,9 @@ MaterialDef Phong Lighting {
 
     MaterialParameters {
 
-        // UV Animation parameters
-        Float x-sprites
-        Float y-sprites
-        Float x-offset
-        Float y-offset
-        Int ani-frame
+        // UV Animation parameters Translation
+        Boolean TranslateUV
+        Vector2 TranslateAmount
 
         // Compute vertex lighting in the shader
         // For better performance
@@ -113,7 +110,7 @@ MaterialDef Phong Lighting {
         LightMode MultiPass
 
         VertexShader GLSL100:   Common/MatDefs/Light/Lighting.vert
-        FragmentShader GLSL100: Common/MatDefs/Light/Lighting.frag
+        FragmentShader GLSL100: Shaders/UVOffsetShaded.frag
 
         WorldParameters {
             WorldViewProjectionMatrix
@@ -125,6 +122,8 @@ MaterialDef Phong Lighting {
         }
 
         Defines {
+            TRANSLATE_UV: TranslateUV
+
             LATC : LATC
             VERTEX_COLOR : UseVertexColor
             VERTEX_LIGHTING : VertexLighting

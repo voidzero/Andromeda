@@ -13,14 +13,15 @@ import mygame.engine.blocks.CustomBlock;
  */
 public class PowerConduit extends CustomBlock {
     private AnimatedTexture tex = new AnimatedTexture();
-    
+
     public PowerConduit() {
         super();
         
         super.loadBlenderModel("Models/powerconduit.blend");
         
-        tex.loadAnimation("Textures/anim.png", "Assets/AnimMaps/anim.txt");
+        tex.loadAnimation("Textures/power_conduit_01_anim.png", "Assets/AnimMaps/PowerConduit.map");
         
+        setMaterial(tex.getMaterial());
         setName("Power - conduit");
     }
 }

@@ -49,7 +49,11 @@ public class Button extends GroupNode implements GuiAction{
         
         if(texture == null) {
             m.setColor("Color", ColorRGBA.Blue);
-            //@ TODO Button caption
+            
+            //caption
+            Text capt = new Text(caption);
+            capt.setLocalTranslation(4, 8, 0);
+            attachChild(capt);
         }
         else {
             tex = assets.assetManager.loadTexture(texture); 

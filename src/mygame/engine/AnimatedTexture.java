@@ -8,6 +8,7 @@ import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
+import com.jme3.math.Vector2f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
@@ -28,7 +29,7 @@ public class AnimatedTexture implements Control {
     private Material mat;
     private Texture texture;
     private int fps = 15;
-    private int frame = 0, frames = 59;
+    private int last_frame = -1, frame = 0, frames = 59;
     private float time = 0;
     
     public AnimatedTexture() {
@@ -39,24 +40,30 @@ public class AnimatedTexture implements Control {
         mapFile = map_file;
         map = new AnimMap(mapFile);
         
+        fps = map.getFps();
         texture = Assets.getInstance().assetManager.loadTexture(textureFile);
+        
+        if(texture != null) {
+           mat = new Material(Assets.getInstance().assetManager, "MatDefs/AnimatedShaded.j3md");
+           mat.setTexture("DiffuseMap", texture);
+           mat.setVector2("TranslateAmount", Vector2f.ZERO);
+           mat.setBoolean("TranslateUV", true);
+        }
         
         Share.getInstance().rootNode.addControl(this);
     }  
     
     public void update(float tpf) {
-        if(texture != null && mat == null) {
-           mat = new Material(Assets.getInstance().assetManager, "MatDefs/AnimatedShaded.j3md");
-        }
+        time += tpf;
         
-        if(mat != null) {
-            time += tpf;
+        if(mat != null && (int) FastMath.floor(((time) * fps) % frames) != last_frame) {            
             frame = (int) FastMath.floor((time * fps) % frames);
             
-            mat.setInt("ani-frame", frame);
+            mat.setVector2("TranslateAmount", map.getUVFrameOffset(frame));
+            last_frame = frame;
         }
         
-        //@TODO aniated material shader UV Transpose : 
+        //@TODO aninated material shader UV Transpose : 
     }
 
     public Texture getTexture() {

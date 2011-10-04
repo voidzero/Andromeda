@@ -29,8 +29,8 @@ public class CustomBlock extends GroupNode implements BlockInterface {
         
         model = (Node) Assets.getInstance().assetManager.loadModel(fname);
         
-        //blender acale fix @TODO why do I have to rescale blender models?? 
-        model.scale(1.3f);
+        //blender scale fix @TODO why do I have to rescale blender models?? 
+        model.scale(1.31f);
         
         this.attachChild(model);
     }
