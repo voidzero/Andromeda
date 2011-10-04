@@ -130,7 +130,6 @@ public class AbstractState extends AbstractAppState {
                  
                  //enable own state inputs
                  if(kinputs != null) {
-                    System.out.println("enable own inputs.");
                     kinputs.attachListener();
                  }
                  
@@ -143,7 +142,6 @@ public class AbstractState extends AbstractAppState {
                 
                  //disable own state inputs (except global_kinputs)
                  if(kinputs != null) {
-                    System.out.println("disable own inputs.");
                     kinputs.detachListener();
                  }
                  
@@ -167,7 +165,6 @@ public class AbstractState extends AbstractAppState {
             this.mtriggers = triggers;
 
             for(int i=0; i<actions.length; i++) {
-                System.out.println("adding : " + actions[i]);
                 shares.inputManager.addMapping(actions[i], new MouseButtonTrigger(triggers[i]));
             }
             
@@ -181,14 +178,16 @@ public class AbstractState extends AbstractAppState {
     }
     
     public final void unsetMouseActions(String[] actions) {
-        if(actions.length == this.mactions.length) {
-            for(int i=0; i<actions.length; i++) {
-                System.out.println("removing : " + actions[i]);
-                shares.inputManager.deleteMapping(actions[i]);
+        if(this.mactions != null) {
+            if(actions.length == this.mactions.length) {
+                for(int i=0; i<actions.length; i++) {
+                    System.out.println("removing : " + actions[i]);
+                    shares.inputManager.deleteMapping(actions[i]);
+                }
             }
-        }
-        else {
-            throw new UnsupportedOperationException("amount of mouse actions is not the same as the amount of known mouse actions");
+            else {
+                throw new UnsupportedOperationException("amount of mouse actions is not the same as the amount of known mouse actions");
+            }
         }
     }
     

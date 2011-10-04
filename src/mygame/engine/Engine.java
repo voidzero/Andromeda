@@ -4,16 +4,6 @@
  */
 package mygame.engine;
 
-import com.jme3.light.SpotLight;
-import com.jme3.material.Material;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.shape.Quad;
-import mygame.Assets;
-import mygame.engine.blocks.Systems.PowerConduit;
 import mygame.engine.nodes.GroupNode;
 import mygame.helpers.Share;
 import mygame.state.MainState;
@@ -33,10 +23,9 @@ public class Engine {
 
     private Engine() {
         Share.getInstance().guiNode = guiNode;
-        scaler.setRootNode(rootNode);
         lighting.testLighting(rootNode);
               
-        mainState.run();       
+        mainState.run();
     }
 
     public void update(float tpf) {

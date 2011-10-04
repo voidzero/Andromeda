@@ -85,8 +85,8 @@ public class Picking {
        direction.subtractLocal(origin).normalizeLocal();
 
        Ray ray = new Ray(origin, direction);
-       
        CollisionResults results = new CollisionResults();
+
        shootables.collideWith(ray, results);
 //        System.out.println("----- Collisions? " + results.size() + "-----");
 //        for (int i = 0; i < results.size(); i++) {

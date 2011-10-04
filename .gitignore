@@ -7,3 +7,6 @@ nbproject/private/
 dist/
 
 *.class
+*.blend1
+*.blend2
+

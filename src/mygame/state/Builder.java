@@ -165,7 +165,7 @@ public class Builder extends AbstractState{
     }
     
     public Vector3f checkCollision() {
-       CollisionResults collisions = cameraPick(shares.rootNode);
+       CollisionResults collisions = cameraPick(rootNode);
 
         if(collisions.size() > 0) {
             for(int i = 0;i<collisions.size();i++) {

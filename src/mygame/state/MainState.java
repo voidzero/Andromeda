@@ -4,13 +4,10 @@
  */
 package mygame.state;
 
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.scene.Node;
-import mygame.engine.gui.Button;
-import mygame.engine.gui.Interfaces.GuiListener;
 
 /**
  *
@@ -19,9 +16,12 @@ import mygame.engine.gui.Interfaces.GuiListener;
 public class MainState extends AbstractState{
     private static MainState INSTANCE = null;
     private Builder builder = null;
+    private Space space = new Space(rootNode);
     
     private MainState(Node parent) {
         super(parent);
+        
+        switchState(space);
         
         int [] mainTriggers =   {KeyInput.KEY_I, KeyInput.KEY_F11  , KeyInput.KEY_TAB};
         String [] mainActions = {"infoToggle"  , "fullScreenToggle", "mouseToggle"};
@@ -47,7 +47,6 @@ public class MainState extends AbstractState{
                 }
 
                 if("buildToggle".equals(name) && keyPressed) {
-                    System.out.println("switching builder");
                     if(builder == null) {
                         builder = new Builder(rootNode);
                         

@@ -62,8 +62,6 @@ public class AnimatedTexture implements Control {
             mat.setVector2("TranslateAmount", map.getUVFrameOffset(frame));
             last_frame = frame;
         }
-        
-        //@TODO aninated material shader UV Transpose : 
     }
 
     public Texture getTexture() {
