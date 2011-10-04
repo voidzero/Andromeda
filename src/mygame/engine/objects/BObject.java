@@ -4,6 +4,8 @@
  */
 package mygame.engine.objects;
 import com.jme3.math.Vector3f;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,12 +14,13 @@ import mygame.engine.blocks.BlockIndex;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Lists.SpaceShips;
 import mygame.engine.nodes.GroupNode;
+import mygame.helpers.ObjectStream;
 
 /**
  *
  * @author Dansion
  */
-public class BObject extends GroupNode{
+public class BObject extends GroupNode {
     public ArrayList<BlockInterface> blocks = new ArrayList<BlockInterface>();
     public BlockIndex inventory = new SpaceShips();
      
@@ -77,10 +80,10 @@ public class BObject extends GroupNode{
     }
     
     public void save() {
-        //@TODO Save Object
+
     }
     
-    public void load() {
-        //@TODO Load Object
+    public static BObject load(String filename) {
+        return null;
     }
 }

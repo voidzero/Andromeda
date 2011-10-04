@@ -50,8 +50,8 @@ public class Builder extends AbstractState{
         this.size_y = size_y;
         this.size_z = size_z;
         
-        String [] keyActions = {"guiMode"     , "floorDown"          , "floorUp"};
-        int [] keyTriggers = {KeyInput.KEY_TAB, KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET};
+        String [] keyActions = {"floorDown"        , "floorUp"            , "Catalog"};
+        int [] keyTriggers = {KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET, KeyInput.KEY_C};
         
         String [] mouseActions = {"addBlock",             "removeBlock"};
         int [] mouseTriggers =   {MouseInput.BUTTON_LEFT, MouseInput.BUTTON_RIGHT};
@@ -82,38 +82,27 @@ public class Builder extends AbstractState{
                     grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
                 }
                 
-                if("guiMode".equals(name) && keyPressed) {
-                    if(isCursorActive()) {
+                if("Catalog".equals(name) && keyPressed) {
+                    if(catalogPanel.isActive()) {
                         enableCursor(false);
                         getCamera().setMode(CameraMode.FLY_CLIP);
                         guiMode = false;
-                    }
+                        guiNode.detachChild(catalogPanel);
+                    } 
                     else {
                         enableCursor(true);
                         getCamera().setMode(CameraMode.STATIC);
                         guiMode = true;
+                        guiNode.attachChild(catalogPanel);
                     }
                 }
                 
                 if("removeBlock".equals(name) && keyPressed) {
                     System.out.println("removeBlock");
                     
-                    if(catalogPanel.isActive()) {
-                        guiNode.detachChild(catalogPanel);
-                    } 
-                    else {
-                        guiNode.attachChild(catalogPanel);
-                    }
-                }
-                
-                if("openCataLog".equals(name) && keyPressed) {
-                    
                 }
             }
         };
-        
-        //Block Catalog Panel
-        guiNode.attachChild(catalogPanel);
         
         catalogPanel.listener = new GuiListener() {
             public void onAction(int returnValue) {
@@ -178,7 +167,7 @@ public class Builder extends AbstractState{
     public Vector3f checkCollision() {
        CollisionResults collisions = cameraPick(shares.rootNode);
 
-        if(collisions != null) {
+        if(collisions.size() > 0) {
             for(int i = 0;i<collisions.size();i++) {
                 CollisionResult col = collisions.getCollision(i);
                 if(col.getGeometry().getName() != null) {

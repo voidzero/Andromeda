@@ -10,7 +10,7 @@ import com.jme3.scene.Node;
  *
  * @author Dansion
  */
-public class GroupNode extends Node{   
+public class GroupNode extends Node {   
     public GroupNode() {
        super();
     }

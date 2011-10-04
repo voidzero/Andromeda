@@ -41,7 +41,6 @@ public class Block extends RenderNode implements BlockInterface {
     
     //Faces                   Front         Back          Top              Left                Right               Bottom
     public int [] indexes = { 0,2,1, 1,2,3, 4,6,5, 5,6,7, 8,10,9, 9,10,11, 12,14,13, 13,14,15, 16,18,17, 17,18,19, 20,22,21, 21,22,23 };
-    private final AssetManager assetManager = Assets.getInstance().assetManager;
     
     public Block() {
         this("block");
@@ -222,7 +221,7 @@ public class Block extends RenderNode implements BlockInterface {
         refreshBlock();
        // mesh.setStatic();
         
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        Material mat = new Material(Assets.getInstance().assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Blue);
         
         setMaterial(mat);
@@ -230,7 +229,7 @@ public class Block extends RenderNode implements BlockInterface {
     }
 
     public void setBlockMaterial(String matFile) {
-        Material mat = assetManager.loadMaterial(matFile);
+        Material mat = Assets.getInstance().assetManager.loadMaterial(matFile);
         setMaterial(mat);
         
     }
