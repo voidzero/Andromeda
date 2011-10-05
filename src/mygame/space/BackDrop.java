@@ -44,7 +44,7 @@ public class BackDrop extends Geometry {
         //Draw to image
         //placeholder backdrop
         g.setColor(new Color(0, 0, 7));
-        g.fillRect(0, 0, 511, 511);
+        g.fillRect(0, 0, 1023, 1023);
         
         g.setColor(new Color(240, 240, 240));
         
