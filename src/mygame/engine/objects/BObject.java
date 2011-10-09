@@ -4,8 +4,6 @@
  */
 package mygame.engine.objects;
 import com.jme3.math.Vector3f;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +12,6 @@ import mygame.engine.blocks.BlockIndex;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Lists.SpaceShips;
 import mygame.engine.nodes.GroupNode;
-import mygame.helpers.ObjectStream;
 
 /**
  *
@@ -48,8 +45,31 @@ public class BObject extends GroupNode {
         }
     }
     
-    public Block getBlock(float x, float y, float z) {
+    public void removeBlock(Vector3f position) {
+        BlockInterface b = getBlock(position);
+        
+        b.getNode().getParent().detachChild(b.getNode());
+        
+        blocks.remove(b);
+    }
+    
+    public BlockInterface getBlock(float x, float y, float z) {
+        for(int i = 0; i < blocks.size(); i++) {
+            BlockInterface b = blocks.get(i);
+            
+            for(int i2 = 0; i2 < b.amount(); i2++) {
+                Block b2 = b.getBlock(i2);
+                if(b2.getWorldTranslation().x == x && b2.getWorldTranslation().y == y && b2.getWorldTranslation().z == z) {
+                    return b;
+                }
+            }
+        }
+        
         return null;
+    }
+    
+    public BlockInterface getBlock(Vector3f position) {
+        return getBlock(position.x, position.y, position.z);
     }
     
     public int getFloorHeight() {

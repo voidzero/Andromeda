@@ -26,4 +26,6 @@ public interface BlockInterface {
     public Block getBlock(int index);
     
     public Vector3f getLocation();
+    
+    public boolean isSolid();
 }

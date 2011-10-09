@@ -63,7 +63,7 @@ public class Builder extends AbstractState{
             public void onAction(String name, boolean keyPressed, float tpf) {
                 if("addBlock".equals(name) && keyPressed) {
                     if(!guiMode && !sel.isBlocked()) { 
-                        obj_loaded.addBlock(catalogPanel.getSelected(), checkCollision());
+                        obj_loaded.addBlock(catalogPanel.getSelected(), checkNearCollision());
                     }
                     else {
                         if(isCursorActive()) {
@@ -100,8 +100,7 @@ public class Builder extends AbstractState{
                 }
                 
                 if("removeBlock".equals(name) && keyPressed) {
-                    System.out.println("removeBlock");
-                    
+                    obj_loaded.removeBlock(checkCollision());
                 }
             }
         };
@@ -152,7 +151,7 @@ public class Builder extends AbstractState{
         super.update(tpf);
 
         catalogPanel.update(tpf);
-        sel.setPlacing(checkCollision());
+        sel.setPlacing(checkNearCollision());
     }
     
     @Override
@@ -174,6 +173,25 @@ public class Builder extends AbstractState{
                 CollisionResult col = collisions.getCollision(i);
                 if(col.getGeometry().getName() != null) {
                     if(col.getGeometry().getName().contains("blockSelection") == false) {
+                        Vector3f newBlockPos = Block.blockCollisionToBlock(col);
+                        
+                        return newBlockPos;
+                    }
+                }
+            }
+        }
+        
+        return new Vector3f();
+    }
+    
+    public Vector3f checkNearCollision() {
+       CollisionResults collisions = cameraPick(rootNode);
+
+        if(collisions.size() > 0) {
+            for(int i = 0;i<collisions.size();i++) {
+                CollisionResult col = collisions.getCollision(i);
+                if(col.getGeometry().getName() != null) {
+                    if(col.getGeometry().getName().contains("blockSelection") == false) {
                         Vector3f newBlockPos = Block.blockCollisionToGrid(col);
                         
                         return newBlockPos;
@@ -186,15 +204,25 @@ public class Builder extends AbstractState{
     }
     
     public void loadBlueprint(BluePrint blue_print) {
+        blueprint = blue_print;
         //set size
         size_x = blue_print.getSizeX();
         size_y = blue_print.getSizeY();
         size_z = blue_print.getSizeZ();
         
         //clear object
-        obj_loaded = new BObject();
+        clearObject();
         
         //refresh grid
         refreshGrid();
+    }
+    
+    private void clearObject() {
+        if(obj_loaded != null) {
+            rootNode.detachChild(obj_loaded); 
+        }
+        
+        obj_loaded = new BObject();
+        rootNode.attachChild(obj_loaded);
     }
 }

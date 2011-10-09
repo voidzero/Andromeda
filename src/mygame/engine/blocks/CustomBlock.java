@@ -19,6 +19,7 @@ import mygame.engine.nodes.GroupNode;
 public class CustomBlock extends GroupNode implements BlockInterface {
     private String name = null;
     private Node model;
+    private boolean solid = true;
     
     public CustomBlock() {
         super("CustomBlock");
@@ -57,5 +58,9 @@ public class CustomBlock extends GroupNode implements BlockInterface {
     
     public Vector3f getLocation() {
         return this.getLocalTranslation();
+    }
+    
+    public boolean isSolid() {
+        return solid;
     }
 }

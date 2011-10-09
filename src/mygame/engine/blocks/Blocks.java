@@ -19,6 +19,7 @@ public class Blocks extends GroupNode implements BlockInterface {
     public String block_name;
     private int block_amount = 1;
     private int count = 0;
+    private boolean solid = true;
     
     private Block[] blocks;
     
@@ -121,5 +122,9 @@ public class Blocks extends GroupNode implements BlockInterface {
     
     public Vector3f getLocation() {
         return this.getLocalTranslation();
+    }
+    
+    public boolean isSolid() {
+        return solid;
     }
 }

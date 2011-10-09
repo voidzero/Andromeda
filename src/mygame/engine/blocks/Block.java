@@ -30,8 +30,10 @@ public class Block extends RenderNode implements BlockInterface {
     public boolean isSolid;
     public long strength = 100;
     public long health;
+    private boolean solid = true;
     public float size_x = 1.0f, size_y = 1.0f, size_z = 1.0f;
     public int x = 0, y = 0, z = 0;
+    
     private GroupNode node = new GroupNode();
     
     public Vector3f [] normals = new Vector3f[24];
@@ -171,12 +173,12 @@ public class Block extends RenderNode implements BlockInterface {
         boolean bt = false;
         boolean bu = false;
         
-        if(master.getBlock(x-1, y, z).isSolid) {bl = true;}        
-        if(master.getBlock(x+1, y, z).isSolid) {br = true;}        
-        if(master.getBlock(x, y, z+1).isSolid) {bf = true;}        
-        if(master.getBlock(x, y, z-1).isSolid) {bb = true;}        
-        if(master.getBlock(x, y+1, z).isSolid) {bt = true;}        
-        if(master.getBlock(x, y-1, z).isSolid) {bu = true;}
+        if(master.getBlock(x-1, y, z).isSolid()) {bl = true;}        
+        if(master.getBlock(x+1, y, z).isSolid()) {br = true;}        
+        if(master.getBlock(x, y, z+1).isSolid()) {bf = true;}        
+        if(master.getBlock(x, y, z-1).isSolid()) {bb = true;}        
+        if(master.getBlock(x, y+1, z).isSolid()) {bt = true;}        
+        if(master.getBlock(x, y-1, z).isSolid()) {bu = true;}
         
         //front or back sloping 
         if(bl && br) {
@@ -253,6 +255,48 @@ public class Block extends RenderNode implements BlockInterface {
         return vector;
     }
     
+    public static Vector3f blockCollisionToBlock(CollisionResult face) {
+        Vector3f contact = face.getContactPoint();
+        Vector3f normal = face.getContactNormal();       
+        Vector3f target = new Vector3f();
+        
+        for(int i = 0;i<3;i++) {
+            float pf = contact.get(i);
+            
+             //y-axis corrections
+            if(i == 1) {
+                pf = pf - 0.5f;
+            }
+            //end correction
+            
+            //positioning through normal
+            if(normal.get(i) < 0) {
+                pf = FastMath.ceil(pf);
+                target.set(i, pf);
+                continue;
+            }
+
+            if(normal.get(i) > 0) {
+                pf = FastMath.floor(pf);
+                target.set(i, pf);
+                continue;
+            }
+            
+            //positioning through coords
+            if(pf < 0) {  
+                pf = ((pf % 1) <= -0.5) ? FastMath.floor(pf) : FastMath.ceil(pf);
+                pf = pf + normal.get(i);
+            }
+            else {
+                pf = ((pf % 1) <= 0.5) ? FastMath.floor(pf) : FastMath.ceil(pf);
+            }
+            
+            target.set(i, pf);
+        }
+        
+        return target;
+    }
+    
     public static Vector3f blockCollisionToGrid(CollisionResult face) {
         Vector3f contact = face.getContactPoint();
         Vector3f normal = face.getContactNormal();       
@@ -321,5 +365,9 @@ public class Block extends RenderNode implements BlockInterface {
     
     public Vector3f getLocation() {
         return this.getLocalTranslation();
+    }
+    
+    public boolean isSolid() {
+        return solid;
     }
 }
