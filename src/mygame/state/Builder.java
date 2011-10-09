@@ -50,8 +50,8 @@ public class Builder extends AbstractState{
         this.size_y = size_y;
         this.size_z = size_z;
         
-        String [] keyActions = {"floorDown"        , "floorUp"            , "Catalog"};
-        int [] keyTriggers = {KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET, KeyInput.KEY_C};
+        String [] keyActions = {"floorDown"        , "floorUp"            , "Catalog"     , "Save"        , "Load"};
+        int [] keyTriggers = {KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET, KeyInput.KEY_C, KeyInput.KEY_O, KeyInput.KEY_L};
         
         String [] mouseActions = {"addBlock",             "removeBlock"};
         int [] mouseTriggers =   {MouseInput.BUTTON_LEFT, MouseInput.BUTTON_RIGHT};
@@ -71,6 +71,14 @@ public class Builder extends AbstractState{
                             CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
                         }
                     }
+                }
+                
+                if("Save".equals(name) && keyPressed) {
+                    obj_loaded.save("test.obj");
+                }
+                
+                if("Load".equals(name) && keyPressed) {
+                    loadObject("test.obj");
                 }
                 
                 if("floorUp".equals(name) && keyPressed) {
@@ -143,7 +151,7 @@ public class Builder extends AbstractState{
     }
     
     public void save(BObject object) {
-        object.save();
+        object.save("test.obj");
     }
     
     @Override
@@ -212,17 +220,36 @@ public class Builder extends AbstractState{
         
         //clear object
         clearObject();
+        newObject();
         
         //refresh grid
         refreshGrid();
+        
+        //refresh selection
+        sel.setTarget(obj_loaded);
     }
     
     private void clearObject() {
         if(obj_loaded != null) {
             rootNode.detachChild(obj_loaded); 
         }
+    }
+    
+    public void newObject() {
+        clearObject();
         
         obj_loaded = new BObject();
         rootNode.attachChild(obj_loaded);
     }
+    
+    public void loadObject(String fname) {
+        clearObject();
+        
+        obj_loaded = BObject.load(fname);
+        rootNode.attachChild(obj_loaded);
+        refreshGrid();
+        
+        sel.setTarget(obj_loaded);
+    }
 }
+

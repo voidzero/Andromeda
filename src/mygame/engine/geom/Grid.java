@@ -78,20 +78,20 @@ public class Grid extends RenderNode {
                 normals[counter + 2] = new Vector3f(0,1,0);
                 normals[counter + 3] = new Vector3f(0,1,0);
                 
-                vertices[counter] = new Vector3f((float) (sx - (size_x / 2.0f) + off_x), 0.0f, (float) (sz - (size_z / 2.0f) + off_z) );
+                vertices[counter] = new Vector3f((float) (sx - (size_x / 2.0f) + off_x), 0.001f, (float) (sz - (size_z / 2.0f) + off_z) );
                 texCoords[counter] = new Vector2f(0,0);
                 
                 // 1
-                vertices[counter + 1] = new Vector3f((float) (sx - (size_x / 2.0f) + 1.0f + off_x), 0.0f, (float) (sz - (size_z / 2.0f) + off_z) );
+                vertices[counter + 1] = new Vector3f((float) (sx - (size_x / 2.0f) + 1.0f + off_x), 0.001f, (float) (sz - (size_z / 2.0f) + off_z) );
                 texCoords[counter + 1] = new Vector2f(1,0);
 
                 // 2 
-                vertices[counter + 2] = new Vector3f((float) (sx - (size_x / 2.0f) + off_x), 0.0f, (float) (sz - (size_z / 2.0f) + 1.0f + off_z) );
+                vertices[counter + 2] = new Vector3f((float) (sx - (size_x / 2.0f) + off_x), 0.001f, (float) (sz - (size_z / 2.0f) + 1.0f + off_z) );
                 texCoords[counter + 2] = new Vector2f(0,1);
 
                 
                 // 3
-                vertices[counter + 3] = new Vector3f((float) (sx - (size_x / 2.0f) + 1.0f + off_x), 0.0f, (float) (sz - (size_z / 2.0f) + 1.0f + off_z));
+                vertices[counter + 3] = new Vector3f((float) (sx - (size_x / 2.0f) + 1.0f + off_x), 0.001f, (float) (sz - (size_z / 2.0f) + 1.0f + off_z));
                 texCoords[counter + 3] = new Vector2f(1,1);
                 
                 indexes[index_counter] = counter;

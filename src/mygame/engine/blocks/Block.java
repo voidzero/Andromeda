@@ -364,7 +364,7 @@ public class Block extends RenderNode implements BlockInterface {
     }
     
     public Vector3f getLocation() {
-        return this.getLocalTranslation();
+        return node.getLocalTranslation();
     }
     
     public boolean isSolid() {

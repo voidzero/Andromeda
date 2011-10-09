@@ -4,7 +4,6 @@
  */
 package mygame.engine.blocks;
 
-import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Node;
@@ -17,7 +16,6 @@ import mygame.engine.nodes.GroupNode;
  * @author Dansion
  */
 public class CustomBlock extends GroupNode implements BlockInterface {
-    private String name = null;
     private Node model;
     private boolean solid = true;
     

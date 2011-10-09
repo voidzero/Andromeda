@@ -4,14 +4,20 @@
  */
 package mygame.engine.objects;
 import com.jme3.math.Vector3f;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.engine.blocks.Block;
 import mygame.engine.blocks.BlockIndex;
+import mygame.engine.blocks.Blocks;
+import mygame.engine.blocks.CustomBlock;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Lists.SpaceShips;
 import mygame.engine.nodes.GroupNode;
+import mygame.helpers.FileInStream;
+import mygame.helpers.FileOutStream;
 
 /**
  *
@@ -48,9 +54,11 @@ public class BObject extends GroupNode {
     public void removeBlock(Vector3f position) {
         BlockInterface b = getBlock(position);
         
-        b.getNode().getParent().detachChild(b.getNode());
+        if(b != null) {
+            b.getNode().getParent().detachChild(b.getNode());
         
-        blocks.remove(b);
+            blocks.remove(b);
+        }
     }
     
     public BlockInterface getBlock(float x, float y, float z) {
@@ -99,11 +107,82 @@ public class BObject extends GroupNode {
     public void loadInEditor() {
     }
     
-    public void save() {
+    public final void save(String fname) {
+        try {       
+            FileOutStream f = new FileOutStream(fname, 1, 0);
+            
+            f.writeInt(blocks.size());
+            
+            for(int i = 0; i < blocks.size(); i++) {
+                BlockInterface b = blocks.get(i);
 
+                
+                
+                if(b instanceof Block) {
+                    f.writeInt(0);
+                }
+
+                if(b instanceof Blocks) {
+                    f.writeInt(1);
+                }
+
+                if(b instanceof CustomBlock) {
+                    f.writeInt(2);
+                }
+                
+                f.writeUTF(b.getClass().getName());
+                f.writeFloat(b.getLocation().x);
+                f.writeFloat(b.getLocation().y);
+                f.writeFloat(b.getLocation().z);
+            }
+            
+            f.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not save object to : " + fname, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not write to object : " + fname, ex);
+        }
     }
     
-    public static BObject load(String filename) {
+    public static BObject load(String fname) {
+        FileInStream f = null;
+        BObject obj = new BObject();
+        
+        try {
+            f = new FileInStream(fname, 1, 0);
+            
+            //read BlockInterface amount
+            int amount = f.readInt();
+            
+            for(int i = 0; i < amount; i++) {
+                int b_type = f.readInt();
+                String b_class = f.readUTF();
+                Vector3f pos = new Vector3f(f.readFloat(), f.readFloat(), f.readFloat());
+                
+                try {
+                    BlockInterface b = (BlockInterface) Class.forName(b_class).newInstance();
+                    
+                    obj.addBlock(b, pos);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, b_class, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, b_class, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, b_class, ex);
+                }
+            }
+            
+            f.close();
+            
+            return obj;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not find object : " + fname, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not write to object : " + fname, ex);
+        }
+        
         return null;
     }
+    
+    //@TODO BObject saving / loading blueprint if available
 }

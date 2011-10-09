@@ -126,4 +126,8 @@ public class BlockSelection extends GroupNode {
     public boolean isBlocked() {
         return isBlocked;
     }
+    
+    public void setTarget(BObject target) {
+        this.target = target;
+    }
 }
