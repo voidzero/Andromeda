@@ -8,6 +8,7 @@ import mygame.engine.blocks.BlockIndex;
 import mygame.engine.blocks.Floors.FloorCarpet01;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloy;
+import mygame.engine.blocks.Spaceship.Hulls.LightAlloyBlock1;
 import mygame.engine.blocks.Spaceship.Hulls.LightAlloyWindowed;
 import mygame.engine.blocks.Systems.PowerConduit;
 
@@ -19,7 +20,7 @@ public class SpaceShips implements BlockIndex {
     public String [] getCategory(String category) {
         switch(categories.valueOf(category)) {
             case Hulls: {
-                String [] res = {"LightAlloy", "LightAlloyWindowed"};
+                String [] res = {"LightAlloy", "LightAlloyWindowed", "LightAlloyBlock1"};
                 return res;
             }
             case Floors: {
@@ -61,6 +62,7 @@ public class SpaceShips implements BlockIndex {
         
         if(name.equals("LightAlloy")) { res = new LightAlloy();}
         if(name.equals("LightAlloyWindowed")) { res = new LightAlloyWindowed();}
+        if(name.equals("LightAlloyBlock1")) { res = new LightAlloyBlock1();}
         if(name.equals("FloorCarpet01")) { res = new FloorCarpet01();}
         if(name.equals("PowerConduit")) { res = new PowerConduit();}
         
