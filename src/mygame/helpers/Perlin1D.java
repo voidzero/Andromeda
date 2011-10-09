@@ -56,9 +56,7 @@ public class Perlin1D {
 
     private float InterpolatedNoiseFlat(float x) {
         int int_x = (int) FastMath.floor(x);
-
         float fract_x = x - int_x;
-
         float v1 = smoothedNoise_1(int_x);
         float v2 = smoothedNoise_1(int_x + 1);
 
@@ -67,9 +65,7 @@ public class Perlin1D {
 
     private float InterpolatedNoiseSmooth(float x) {
         int int_x = (int) FastMath.floor(x);
-
         float fract_x = x - int_x;
-
         float v1 = smoothedNoise_1(int_x);
         float v2 = smoothedNoise_1(int_x + 1);
 
@@ -82,7 +78,6 @@ public class Perlin1D {
 
     private float interpolateSmooth(float v1, float v2, float fract) {
 	float ft = fract * FastMath.PI;
-
 	float f = (1 - FastMath.cos(ft)) * .5f;
 
 	return  v1 * (1 - f) + v2 *f;
@@ -94,10 +89,25 @@ public class Perlin1D {
         int n = numberOfOctaves - 1;
 
         for(int i = 0; i < n; i++) {
-          int frequency = 2 * i;
-          float amplitude = FastMath.PI;
+            int frequency = 2 * i;
+            float amplitude = FastMath.PI;
 
-          total = total + InterpolatedNoiseSmooth(x * frequency) * amplitude;
+            total = total + InterpolatedNoiseSmooth(x * frequency) * amplitude;
+        }
+
+        return total;
+    }
+
+    public float PerlinNoiseFlat(float x) {
+        float total = 0;
+        float p = persistence;
+        int n = numberOfOctaves - 1;
+
+        for(int i = 0; i < n; i++) {
+            int frequency = 2 * i;
+            float amplitude = FastMath.PI;
+
+            total = total + InterpolatedNoiseFlat(x * frequency) * amplitude;
         }
 
         return total;
