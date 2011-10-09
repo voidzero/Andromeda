@@ -15,12 +15,11 @@ import mygame.engine.Camera.CameraMode;
 import mygame.engine.Picking;
 import mygame.engine.blocks.Block;
 import mygame.engine.blocks.BlockSelection;
-import mygame.engine.blocks.Blocks;
-import mygame.engine.blocks.Spaceship.Hulls.LightAlloyWindowed;
 import mygame.engine.geom.Grid;
 import mygame.engine.gui.Interfaces.GuiListener;
 import mygame.engine.gui.Panels.BlockCatalog;
 import mygame.engine.objects.BObject;
+import mygame.items.blueprints.BluePrint;
 
 /**
  *
@@ -36,6 +35,7 @@ public class Builder extends AbstractState{
     
     private BObject obj_loaded = new BObject();
     private BlockCatalog catalogPanel = new BlockCatalog(obj_loaded.inventory);
+    private BluePrint blueprint;
     private boolean guiMode;
     private Grid grid;
     
@@ -67,6 +67,7 @@ public class Builder extends AbstractState{
                     }
                     else {
                         if(isCursorActive()) {
+                            //Pick Gui
                             CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
                         }
                     }
@@ -86,6 +87,7 @@ public class Builder extends AbstractState{
                     if(catalogPanel.isActive()) {
                         enableCursor(false);
                         getCamera().setMode(CameraMode.FLY_CLIP);
+                        getCamera().setMovementSpeed(20);
                         guiMode = false;
                         guiNode.detachChild(catalogPanel);
                     } 
@@ -110,8 +112,7 @@ public class Builder extends AbstractState{
             }
         };
         
-        Blocks myBlock = new LightAlloyWindowed();
-        sel = new BlockSelection(obj_loaded, myBlock);
+        sel = new BlockSelection(obj_loaded, catalogPanel.getSelected());
         rootNode.attachChild(sel);
         rootNode.attachChild(obj_loaded);
         initGrid();
@@ -120,6 +121,7 @@ public class Builder extends AbstractState{
         setKeyListener(actionListener);
         
         getCamera().setMode(CameraMode.FLY_CLIP);
+        getCamera().setMovementSpeed(20);
     }
     
     private void initGrid() {
@@ -181,5 +183,18 @@ public class Builder extends AbstractState{
         }
         
         return new Vector3f();
+    }
+    
+    public void loadBlueprint(BluePrint blue_print) {
+        //set size
+        size_x = blue_print.getSizeX();
+        size_y = blue_print.getSizeY();
+        size_z = blue_print.getSizeZ();
+        
+        //clear object
+        obj_loaded = new BObject();
+        
+        //refresh grid
+        refreshGrid();
     }
 }

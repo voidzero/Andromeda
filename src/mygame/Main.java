@@ -1,8 +1,6 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.font.BitmapText;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import java.util.logging.Level;
@@ -24,6 +22,7 @@ public class Main extends SimpleApplication {
     
     public Main() {
         super();
+        setPauseOnLostFocus(false);
         showSettings = true;
 
     }

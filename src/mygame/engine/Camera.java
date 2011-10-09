@@ -25,7 +25,8 @@ import mygame.helpers.Share;
  
  * @author Dansion
  */
-public class Camera extends com.jme3.renderer.Camera {   
+public class Camera extends com.jme3.renderer.Camera {
+    private float speed;
     public enum CameraMode { STATIC, FLY, FLY_CLIP, FOLLOW, FOLLOW_CLIP, FPS };
     private static Share shares = Share.getInstance();
     
@@ -56,13 +57,11 @@ public class Camera extends com.jme3.renderer.Camera {
     public Camera(int cwidth, int cheight, Node rootNode, String name) {
         super(cwidth, cheight);
         
-        setLocation(new Vector3f(0f, 1.8f, 10f));
+        setLocation(new Vector3f(0f, 1.8f, 0f));
         lookAt(new Vector3f(0f, 1.8f, 0f), Vector3f.UNIT_Y);
 
         setViewPort(0.0f, 1.0f, 0.0f, 1.0f);
-        setFrustumPerspective(75f, (float) cwidth / cheight, 0.01f, 5000f);
-        
-        setName(name);
+        setFrustumPerspective(75f, (float) cwidth / cheight, 0.01f, 300000f);
         
         viewPort = shares.renderManager.createMainView(name, this);
         viewPort.attachScene(rootNode);
@@ -88,6 +87,14 @@ public class Camera extends com.jme3.renderer.Camera {
     
     public CameraMode getMode() {
         return mode;
+    }
+    
+    public void setMovementSpeed(float speed) {
+        this.speed = speed;
+    }
+    
+    public float getMovementSpeed() {
+        return speed;
     }
     
     private void setFreeMovementActions() {
@@ -128,7 +135,7 @@ public class Camera extends com.jme3.renderer.Camera {
           
           listener = new AnalogListener() {
               public void onAnalog(String name, float value, float tpf) {
-                float speed = tpf * 5;
+                float speed = tpf * getMovementSpeed();
                 
                 if("FC_Forward".equals(name)) {
                     Vector3f dir = getDirection();

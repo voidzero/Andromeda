@@ -8,6 +8,8 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.scene.Node;
+import mygame.items.blueprints.ships.Small;
+import mygame.items.blueprints.ships.Tiny;
 
 /**
  *
@@ -20,8 +22,6 @@ public class MainState extends AbstractState{
     
     private MainState(Node parent) {
         super(parent);
-        
-        switchState(space);
         
         int [] mainTriggers =   {KeyInput.KEY_I, KeyInput.KEY_F11  , KeyInput.KEY_TAB};
         String [] mainActions = {"infoToggle"  , "fullScreenToggle", "mouseToggle"};
@@ -49,7 +49,7 @@ public class MainState extends AbstractState{
                 if("buildToggle".equals(name) && keyPressed) {
                     if(builder == null) {
                         builder = new Builder(rootNode);
-                        
+                        builder.loadBlueprint(new Small());
                         enableCursor(false);
                         
                         switchState(builder);
@@ -83,6 +83,8 @@ public class MainState extends AbstractState{
         enableCamera(true);
         enableCursor(true);
         enableGuiCam(true);
+        
+        switchState(space);
     }
        
     @Override
