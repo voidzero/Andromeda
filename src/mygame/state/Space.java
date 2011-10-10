@@ -54,7 +54,6 @@ public class Space extends AbstractState{
 
         //Test code :
         for(int i = 0; i < 9; i++) {
-            System.out.println("Adding " + objects[i]);
             planets[i] = new Planet(objects[i], distances[i], sizes[i]);
             space.attachChild(planets[i]);
         }

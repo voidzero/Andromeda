@@ -26,45 +26,45 @@ import mygame.helpers.FileOutStream;
 public class BObject extends GroupNode {
     public ArrayList<BlockInterface> blocks = new ArrayList<BlockInterface>();
     public BlockIndex inventory = new SpaceShips();
-     
+
     private int floorHeight = 4;
     private int currentFloor = 1;
     private int floorAmount = 3;
-    
+
     public BObject() {
         super();
     }
-    
+
     public void addBlock(BlockInterface block, Vector3f position) {
         try {
             BlockInterface newBlock = block.getClass().newInstance();
-            
+
             blocks.add(newBlock);
-            
+
             newBlock.getNode().setLocalTranslation(position);
             attachChild(newBlock.getNode());
-            
+
         } catch (InstantiationException ex) {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void removeBlock(Vector3f position) {
         BlockInterface b = getBlock(position);
-        
+
         if(b != null) {
             b.getNode().getParent().detachChild(b.getNode());
-        
+
             blocks.remove(b);
         }
     }
-    
+
     public BlockInterface getBlock(float x, float y, float z) {
         for(int i = 0; i < blocks.size(); i++) {
             BlockInterface b = blocks.get(i);
-            
+
             for(int i2 = 0; i2 < b.amount(); i2++) {
                 Block b2 = b.getBlock(i2);
                 if(b2.getWorldTranslation().x == x && b2.getWorldTranslation().y == y && b2.getWorldTranslation().z == z) {
@@ -72,52 +72,50 @@ public class BObject extends GroupNode {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     public BlockInterface getBlock(Vector3f position) {
         return getBlock(position.x, position.y, position.z);
     }
-    
+
     public int getFloorHeight() {
         return floorHeight;
     }
-    
+
     public void setCurrentFloor(int floor) {
         currentFloor = floor;
-        
+
         if(currentFloor > floorAmount) {
             currentFloor = floorAmount;
         }
-        
+
         if( currentFloor < 1 ) {
             currentFloor = 1;
         }
     }
-    
+
     public int getCurrentFloor() {
         return currentFloor;
     }
-    
+
     public int getCurrentFloorY() {
         return getCurrentFloor() * getFloorHeight() - getFloorHeight();
     }
-    
+
     public void loadInEditor() {
     }
-    
+
     public final void save(String fname) {
-        try {       
+        try {
             FileOutStream f = new FileOutStream(fname, 1, 0);
-            
+
             f.writeInt(blocks.size());
-            
+
             for(int i = 0; i < blocks.size(); i++) {
                 BlockInterface b = blocks.get(i);
 
-                
-                
                 if(b instanceof Block) {
                     f.writeInt(0);
                 }
@@ -129,13 +127,13 @@ public class BObject extends GroupNode {
                 if(b instanceof CustomBlock) {
                     f.writeInt(2);
                 }
-                
+
                 f.writeUTF(b.getClass().getName());
                 f.writeFloat(b.getLocation().x);
                 f.writeFloat(b.getLocation().y);
                 f.writeFloat(b.getLocation().z);
             }
-            
+
             f.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not save object to : " + fname, ex);
@@ -143,25 +141,25 @@ public class BObject extends GroupNode {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not write to object : " + fname, ex);
         }
     }
-    
+
     public static BObject load(String fname) {
         FileInStream f = null;
         BObject obj = new BObject();
-        
+
         try {
             f = new FileInStream(fname, 1, 0);
-            
+
             //read BlockInterface amount
             int amount = f.readInt();
-            
+
             for(int i = 0; i < amount; i++) {
                 int b_type = f.readInt();
                 String b_class = f.readUTF();
                 Vector3f pos = new Vector3f(f.readFloat(), f.readFloat(), f.readFloat());
-                
+
                 try {
                     BlockInterface b = (BlockInterface) Class.forName(b_class).newInstance();
-                    
+
                     obj.addBlock(b, pos);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, b_class, ex);
@@ -171,18 +169,26 @@ public class BObject extends GroupNode {
                     Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, b_class, ex);
                 }
             }
-            
+
             f.close();
-            
+            obj.optimize();
+
             return obj;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not find object : " + fname, ex);
         } catch (IOException ex) {
-            Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not write to object : " + fname, ex);
+            Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, "Could not read from object : " + fname, ex);
         }
-        
+
         return null;
     }
-    
+
+    public void optimize() {
+        for(int i = 0; i < blocks.size(); i++) {
+            BlockInterface b = blocks.get(i);
+            b.optimizeFor(this, b.getNode().getLocalTranslation());
+        }
+    }
+
     //@TODO BObject saving / loading blueprint if available
 }

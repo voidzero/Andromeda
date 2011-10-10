@@ -7,6 +7,7 @@ package mygame.engine.blocks.Interface;
 import com.jme3.math.Vector3f;
 import mygame.engine.blocks.Block;
 import mygame.engine.nodes.GroupNode;
+import mygame.engine.objects.BObject;
 
 /**
  *
@@ -14,18 +15,20 @@ import mygame.engine.nodes.GroupNode;
  */
 public interface BlockInterface {
     public Integer x = 0;
-    
+
     public String getName();
-    
+
     public GroupNode getNode();
-    
+
     public void setAlpha(boolean alpha);
-    
+
     public int amount();
-    
+
     public Block getBlock(int index);
-    
+
     public Vector3f getLocation();
-    
+
     public boolean isSolid();
+
+    public void optimizeFor(BObject parent, Vector3f b_pos);
 }

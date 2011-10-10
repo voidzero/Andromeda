@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import mygame.Assets;
+import mygame.helpers.Graphics.Perlin2DGraphics;
 
 /**
  *
@@ -48,12 +49,47 @@ public class BackDrop extends Geometry {
 
         g.setColor(new Color(240, 240, 240));
 
-        for(int i=0; i<1000; i++) {
+        //BG Stars
+        for(int i=0; i<1250; i++) {
             g.fillRect((int) FastMath.floor(FastMath.rand.nextFloat() * 1023), (int) FastMath.floor(FastMath.rand.nextFloat() * 1023), 1, 1);
         }
 
+        //Nebula
+        Perlin2DGraphics nebula = new Perlin2DGraphics();
+        nebula.setSize(1024, 1024);
+        nebula.setEndColor(new Color(5,62,148,255));
+        BufferedImage neb = nebula.getImage();
+
+        int tot = img.getWidth() * img.getHeight();
+
+        for(int x = 0; x<img.getWidth(); x++) {
+            for(int y = 0; y<img.getHeight(); y++) {
+                Color col_1 = img.getRGB(x, y) == 0 ? new Color(0,0,0,1) : new Color(img.getRGB(x, y));
+                Color col_2 = neb.getRGB(x, y) == 0 ? new Color(0,0,0,0) : new Color(neb.getRGB(x, y));
+
+                float delta_1 = 1;//0.5f;//col_1.getAlpha() / 255.00f;
+                float delta_2 = 0.5f;//col_2.getAlpha() / 255.00f;
+                               //     System.out.println(col_2.getTransparency());
+                int r = (int) FastMath.floor((col_1.getRed() * delta_1) * (1 - delta_2) + col_2.getRed() * delta_2);
+                int gg = (int) FastMath.floor((col_1.getGreen() * delta_1) * (1 - delta_2) + col_2.getGreen() * delta_2);
+                int b = (int) FastMath.floor((col_1.getBlue() * delta_1) * (1 - delta_2) + col_2.getBlue() * delta_2);
+
+                Color mix = new Color(r, gg, b);//(int) delta_2 * 255);
+
+                g.setColor(mix);
+                g.fillRect(x, y, 1, 1);
+            }
+        }
+
+        //FG Stars
+        g.setColor(new Color(240, 240, 240));
+
+        for(int i=0; i<250; i++) {
+            g.fillRect((int) FastMath.floor(FastMath.rand.nextFloat() * 1023), (int) FastMath.floor(FastMath.rand.nextFloat() * 1023), 2, 2);
+        }
+
         myTex.setImage(awtLoader.load(img, false));
-       
+
         mat.setTexture("ColorMap", myTex);
     }
 }

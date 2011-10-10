@@ -41,11 +41,13 @@ public class Perlin1D {
 
         if(x >= 0 && x < size) {
             if(x_bef < 0 ) {
-                x_bef = size - 1;
+                x_bef = x_bef % (size - 1);
+
+                x_bef = size - 1 - x_bef;
             }
 
             if(x_aft > size - 1) {
-                x_aft = 0;
+                x_aft = x_aft % (size - 1);
             }
 
             return noise[x] / 2.0f  +  noise[x_bef] / 4.0f  +  noise[x_aft] / 4.0f;
@@ -88,7 +90,7 @@ public class Perlin1D {
         float p = persistence;
         int n = numberOfOctaves - 1;
 
-        for(int i = 0; i < n; i++) {
+        for(int i = 1; 1 <= n; i++) {
             int frequency = 2 * i;
             float amplitude = FastMath.PI;
 
@@ -103,9 +105,9 @@ public class Perlin1D {
         float p = persistence;
         int n = numberOfOctaves - 1;
 
-        for(int i = 0; i < n; i++) {
+        for(int i = 1; i <= n; i++) {
             int frequency = 2 * i;
-            float amplitude = FastMath.PI;
+            float amplitude = i / 2;
 
             total = total + InterpolatedNoiseFlat(x * frequency) * amplitude;
         }

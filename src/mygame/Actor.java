@@ -12,11 +12,9 @@ public class Actor {
     private String a;
     private String h;
     public void main(String name){
-         System.out.println( "new object" );
          a = name;
     }
 
     public void show() {
-        System.out.println(a);
     }
 }

@@ -19,20 +19,20 @@ public class Main extends SimpleApplication {
 
    // protected boolean showSettings = false;
     private Geometry lightMdl;
-    
+
     public Main() {
         super();
         setPauseOnLostFocus(false);
         showSettings = true;
 
     }
-   
+
     public static void main(String[] args) {
         Main app = new Main();
         Logger.getLogger("").setLevel(Level.SEVERE);
         app.start();
     }
-    
+
     public float runTimer(float delta) {
         counter = counter + delta;
         return counter;
@@ -46,19 +46,19 @@ public class Main extends SimpleApplication {
         Share.getInstance().renderManager = renderManager;
         Share.getInstance().rootNode = rootNode;
         Share.getInstance().guiNode = guiNode;
-        
+
         Assets.getInstance().assetManager = assetManager;
-        
+
         engine = Engine.getInstance();
-        
+
         guiNode.detachAllChildren();
-        
+
         renderManager.setHandleTranslucentBucket(true);
         renderManager.removeMainView("Default");
         renderManager.removePostView("Gui Default");
-        
+
         showSettings = false;
-        
+
         player.main("player");
         player.show();
 
@@ -72,6 +72,6 @@ public class Main extends SimpleApplication {
     }
 
     @Override
-    public void simpleRender(RenderManager rm) {   
+    public void simpleRender(RenderManager rm) {
     }
 }
