@@ -77,35 +77,12 @@ public class TopFace extends BlockFace implements BlockFaceInterface {
         setVisible(false);
     }
 
-    public void slopeBottomLeft() {
-        resetMesh();
-    }
-
-    public void slopeBottomRight() {
-        resetMesh();
-    }
-
-    public void slopeBottomFront() {
-        resetMesh();
-    }
-
-    public void slopeBottomBack() {
-        resetMesh();
-    }
-
-    public void slopeBottomLeftBack() {
-        resetMesh();
-    }
-
-    public void slopeBottomRightBack() {
-        resetMesh();
-    }
-
-    public void slopeBottomLeftFront() {
-        resetMesh();
-    }
-
-    public void slopeBottomRightFront() {
-        resetMesh();
-    }
+    public void slopeBottomLeft() {}
+    public void slopeBottomRight() {}
+    public void slopeBottomFront() {}
+    public void slopeBottomBack() {}
+    public void slopeBottomLeftBack() {}
+    public void slopeBottomRightBack() {}
+    public void slopeBottomLeftFront() {}
+    public void slopeBottomRightFront() {}
 }

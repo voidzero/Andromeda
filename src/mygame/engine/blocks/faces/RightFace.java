@@ -45,36 +45,40 @@ public class RightFace extends BlockFace implements BlockFaceInterface {
         updateFace();
     }
 
-    public void slopeTopLeft() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public void slopeTopLeft() {}
 
     public void slopeTopRight() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(0.5f, 1f,  -0.5f);
+        vertices[1] = new Vector3f(0.5f, 1f,   0.5f);
+        updateFace();
     }
 
     public void slopeTopFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(-0.5f, 1f, 0.5f);
+        updateFace();
     }
 
     public void slopeTopBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[1] = new Vector3f(-0.5f, 1f, -0.5f);
+        texCoord[1] = new Vector2f(0,0);
+        updateFace();
     }
 
-    public void slopeTopLeftBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public void slopeTopLeftBack() {}
 
     public void slopeTopRightBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(0.5f, 1f,  -0.5f);
+        vertices[1] = new Vector3f(0.5f, 1f,  -0.5f);
+        texCoord[1] = new Vector2f(0,0);
+        updateFace();
     }
 
-    public void slopeTopLeftFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public void slopeTopLeftFront() {}
 
     public void slopeTopRightFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(0.5f, 1f, 0.5f);
+        vertices[1] = new Vector3f(0.5f, 1f, 0.5f);
+        updateFace();
     }
 
     public void slopeBottomLeft() {

@@ -9,6 +9,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import mygame.Assets;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.faces.BackFace;
@@ -80,6 +81,8 @@ public class Block extends GroupNode implements BlockInterface {
 
 
     public void optimizeFor(BObject parent, Vector3f b_pos, boolean optimize_neighbours) {
+        resetBlock();
+
         //block obj_loc
         Vector3f pos = this.getNode().getLocalTranslation();
 
@@ -138,37 +141,37 @@ public class Block extends GroupNode implements BlockInterface {
         boolean bus = bub != null ? bub.isSolid() && (!bub.isTransparant() || (bub.isTransparant() && isTransparant())) : false;
 
         //left-back
-        BlockInterface blbb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z + 1, true);
+        BlockInterface blbb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z + 1, true);
 
         if(blbb != null && optimize_neighbours) {
-            blbb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z + 1), false);
+            blbb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z + 1), false);
         }
 
         boolean blbs = blbb != null ? blbb.isSolid() && (!blbb.isTransparant() || (blbb.isTransparant() && isTransparant())) : false;
 
         //right-back
-        BlockInterface brbb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z + 1, true);
+        BlockInterface brbb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z + 1, true);
 
         if(brbb != null && optimize_neighbours) {
-            brbb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z + 1), false);
+            brbb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z + 1), false);
         }
 
         boolean brbs = brbb != null ? brbb.isSolid() && (!brbb.isTransparant() || (brbb.isTransparant() && isTransparant())) : false;
 
         //left-front
-        BlockInterface blfb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z - 1, true);
+        BlockInterface blfb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z - 1, true);
 
         if(blfb != null && optimize_neighbours) {
-            blfb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z - 1), false);
+            blfb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z - 1), false);
         }
 
         boolean blfs = blfb != null ? blfb.isSolid() && (!blfb.isTransparant() || (blfb.isTransparant() && isTransparant())) : false;
 
         //right-front
-        BlockInterface brfb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z - 1, true);
+        BlockInterface brfb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z - 1, true);
 
         if(brfb != null && optimize_neighbours) {
-            brfb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z - 1), false);
+            brfb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z - 1), false);
         }
 
         boolean brfs = brfb != null ? brfb.isSolid() && (!brfb.isTransparant() || (brfb.isTransparant() && isTransparant())) : false;
@@ -197,6 +200,65 @@ public class Block extends GroupNode implements BlockInterface {
         if(brs) {
             faces[5].setVisible(false);
         }
+
+        //sloping - top free
+        if(!bts) {
+            //left
+            if((!bls && bbs && bfs && brs) || (!bls && !bbs && !bfs && brs)) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopLeft();
+                }
+            }
+
+            //right
+            if((!brs && bbs && bfs && bls) || (!brs && !bbs && !bfs && bls)) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopRight();
+                }
+            }
+
+            //back
+            if((!bbs && bls && brs && bfs) || (!bbs && !bls && !brs && bfs)) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopBack();
+                }
+            }
+
+            //front
+            if((!bfs && bls && brs && bbs) || (!bfs && !bls && !brs && bbs)) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopFront();
+                }
+            }
+
+            //back-left
+            if(!bbs && !bls && brs && bfs && brfs) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopLeftBack();
+                }
+            }
+
+            //back-right
+            if(!bbs && !brs && bls && bfs && blfs) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopRightBack();
+                }
+            }
+
+            //front-left
+            if(!bfs && !bls && brs && bbs && brbs) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopLeftFront();
+                }
+            }
+
+            //front-right
+            if(!bfs && !brs && bls && bbs && blbs) {
+                for(int i = 0; i < faces.length; i++) {
+                    faces[i].slopeTopRightFront();
+                }
+            }
+        }
     }
 
     public void optimizeFor(BObject parent, Vector3f b_pos) {
@@ -207,6 +269,14 @@ public class Block extends GroupNode implements BlockInterface {
         for(int i = 0; i < faces.length; i++) {
             BlockFace b = (BlockFace) faces[i];
             b.updateFace();
+        }
+    }
+
+    public void resetBlock() {
+        for(int i = 0; i < faces.length; i++) {
+            BlockFaceInterface b = (BlockFaceInterface) faces[i];
+            b.setVisible(true);
+            b.resetMesh();
         }
     }
 
@@ -222,8 +292,11 @@ public class Block extends GroupNode implements BlockInterface {
 
     public void setBlockMaterial(String matFile) {
         Material mat = Assets.getInstance().assetManager.loadMaterial(matFile);
-        setMaterial(mat);
 
+        for(int i = 0; i < faces.length; i++) {
+            BlockFace b = (BlockFace) faces[i];
+            b.setMaterial(mat);
+        }
     }
 
     public static Vector3f vectorToGrid(Vector3f vector) {
@@ -335,9 +408,16 @@ public class Block extends GroupNode implements BlockInterface {
     }
 
     public void setAlpha(boolean alpha) {
+        if(alpha) {}
+        else {
+            //gui alpha fix
+            setQueueBucket(Bucket.Inherit);
+        }
+
         for(int i = 0;i < faces.length; i++) {
             if(hasChild((BlockFace) faces[i])) {
-                faces[i].setAlpha(alpha);
+                BlockFace b = (BlockFace) faces[i];
+                b.setAlpha(alpha);
             }
         }
     }
@@ -356,6 +436,10 @@ public class Block extends GroupNode implements BlockInterface {
 
     public boolean isSolid() {
         return solid;
+    }
+
+    public void isSolid(boolean solid) {
+        this.solid = solid;
     }
 
     @Override

@@ -57,8 +57,9 @@ public class BObject extends GroupNode {
         BlockInterface b = getBlock(position, false);
 
         if(b != null) {
+            b.isSolid(false);
+            b.optimizeFor(this, b.getNode().getLocalTranslation(), true);
             b.getNode().getParent().detachChild(b.getNode());
-
             blocks.remove(b);
         }
     }
@@ -76,7 +77,12 @@ public class BObject extends GroupNode {
                 }
             }
             else {
-                return b;
+                for(int i2 = 0; i2 < b.amount(); i2++) {
+                    Block b2 = b.getBlock(i2);
+                    if(b2.getWorldTranslation().x == x && b2.getWorldTranslation().y == y && b2.getWorldTranslation().z == z) {
+                        return b;
+                    }
+                }
             }
         }
 

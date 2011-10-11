@@ -28,6 +28,8 @@ public interface BlockInterface {
 
     public Vector3f getLocation();
 
+    public void isSolid(boolean solid);
+
     public boolean isSolid();
 
     public void isTransparant(boolean transparant);

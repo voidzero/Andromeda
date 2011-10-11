@@ -40,6 +40,7 @@ public class BlockFace extends RenderNode {
 
     public final void updateFace() {
         mesh = new Mesh();
+        mesh.setDynamic();
 
         mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));
         mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
@@ -54,10 +55,12 @@ public class BlockFace extends RenderNode {
     public void setAlpha(boolean alpha) {
         if(alpha) {
             getMaterial().getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+            getMaterial().setBoolean("m_UseAlpha", true);
         }
         else {
             Material mat = getMaterial();
             mat.getAdditionalRenderState().setBlendMode(BlendMode.Off);
+            mat.setBoolean("m_UseAlpha", false);
             setMaterial(mat);
             setQueueBucket(Bucket.Inherit);
         }
@@ -65,7 +68,7 @@ public class BlockFace extends RenderNode {
 
     public void setVisible(boolean visible) {
         if(visible) {
-            setCullHint(CullHint.Inherit);
+            setCullHint(CullHint.Dynamic);
         }
         else {
             setCullHint(CullHint.Always);

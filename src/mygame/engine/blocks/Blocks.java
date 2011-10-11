@@ -101,8 +101,6 @@ public class Blocks extends GroupNode implements BlockInterface {
     }
 
     public void setAlpha(boolean alpha) {
-        Material mat = null;
-
         for(int i=0;i<block_amount;i++) {
             blocks[i].setAlpha(alpha);
         }
@@ -118,6 +116,13 @@ public class Blocks extends GroupNode implements BlockInterface {
 
     public boolean isSolid() {
         return solid;
+    }
+
+    public void isSolid(boolean solid) {
+        this.solid = solid;
+        for(int i = 0; i < block_amount; i++) {
+            blocks[i].isSolid(solid);
+        }
     }
 
     public void optimizeFor(BObject parent, Vector3f b_pos , boolean optimize_neighbours) {

@@ -64,8 +64,12 @@ public class CustomBlock extends GroupNode implements BlockInterface {
         return solid;
     }
 
-    public void optimizeFor(BObject parent, Vector3f b_pos) {}
+    public void isSolid(boolean solid) {
+        this.solid = solid;
+    }
     
+    public void optimizeFor(BObject parent, Vector3f b_pos) {}
+
     public void optimizeFor(BObject parent, Vector3f b_pos, boolean optimize_neighbours) {}
 
     public boolean isTransparant() {

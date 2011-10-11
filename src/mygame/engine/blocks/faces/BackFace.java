@@ -46,35 +46,33 @@ public class BackFace extends BlockFace implements BlockFaceInterface {
     }
 
     public void slopeTopLeft() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[1] = new Vector3f(-0.5f, 1f,  0.5f);
+        texCoord[1] = new Vector2f(0,0);
+        updateFace();
     }
 
     public void slopeTopRight() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void slopeTopFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f( 0.5f, 1f,  0.5f);
+        updateFace();
     }
 
     public void slopeTopBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(-0.5f, 1f,  -0.5f);
+        vertices[1] = new Vector3f( 0.5f, 1f,  -0.5f);
+        updateFace();
     }
 
     public void slopeTopLeftBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(-0.5f, 1f,  -0.5f);
+        vertices[1] = new Vector3f(-0.5f, 1f,  -0.5f);
+        texCoord[1] = new Vector2f(0,0);
+        updateFace();
     }
 
     public void slopeTopRightBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void slopeTopLeftFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void slopeTopRightFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        vertices[0] = new Vector3f(0.5f, 1f,  -0.5f);
+        vertices[1] = new Vector3f(0.5f, 1f,  -0.5f);
+        updateFace();
     }
 
     public void slopeBottomLeft() {
@@ -82,10 +80,6 @@ public class BackFace extends BlockFace implements BlockFaceInterface {
     }
 
     public void slopeBottomRight() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void slopeBottomFront() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -101,11 +95,11 @@ public class BackFace extends BlockFace implements BlockFaceInterface {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void slopeBottomLeftFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void slopeBottomRightFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    //face must be invisible when this slopes are active so no need to slope
+    public void slopeTopFront() {}
+    public void slopeBottomFront() {}
+    public void slopeTopLeftFront() {}
+    public void slopeTopRightFront() {}
+    public void slopeBottomLeftFront() {}
+    public void slopeBottomRightFront() {}
 }
