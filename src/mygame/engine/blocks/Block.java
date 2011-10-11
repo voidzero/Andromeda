@@ -6,27 +6,27 @@ package mygame.engine.blocks;
 
 import com.jme3.collision.CollisionResult;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Vector2f;
-import com.jme3.scene.Mesh;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.util.BufferUtils;
-import com.jme3.util.TangentBinormalGenerator;
 import mygame.Assets;
 import mygame.engine.blocks.Interface.BlockInterface;
+import mygame.engine.blocks.faces.BackFace;
+import mygame.engine.blocks.faces.BlockFace;
+import mygame.engine.blocks.faces.BottomFace;
+import mygame.engine.blocks.faces.FrontFace;
+import mygame.engine.blocks.faces.Interfaces.BlockFaceInterface;
+import mygame.engine.blocks.faces.LeftFace;
+import mygame.engine.blocks.faces.RightFace;
+import mygame.engine.blocks.faces.TopFace;
 import mygame.engine.nodes.GroupNode;
-import mygame.engine.nodes.RenderNode;
 import mygame.engine.objects.BObject;
 
 /**
  *
  * @author Dansion
  */
-public class Block extends RenderNode implements BlockInterface {
+public class Block extends GroupNode implements BlockInterface {
     public boolean isSolid;
     public long strength = 100;
     public long health;
@@ -34,14 +34,8 @@ public class Block extends RenderNode implements BlockInterface {
     public float size_x = 1.0f, size_y = 1.0f, size_z = 1.0f;
     public int x = 0, y = 0, z = 0;
 
-    private GroupNode node = new GroupNode();
-
-    public Vector3f [] normals = new Vector3f[24];
-    public Vector3f [] vertices = new Vector3f[24];
-    public Vector2f [] texCoord = new Vector2f[24];
-
-    //Faces                   Front         Back          Top              Left                Right               Bottom
-    public int [] indexes = { 0,2,1, 1,2,3, 4,6,5, 5,6,7, 8,10,9, 9,10,11, 12,14,13, 13,14,15, 16,18,17, 17,18,19, 20,22,21, 21,22,23 };
+    public BlockFaceInterface [] faces = {new TopFace(), new BottomFace(), new FrontFace(), new BackFace(), new LeftFace(), new RightFace()};
+    private boolean transparant = false;
 
     public Block() {
         this("block");
@@ -49,13 +43,11 @@ public class Block extends RenderNode implements BlockInterface {
 
     public Block(String name) {
         super(name);
-        mesh = new Mesh();
 
         health = strength;
+        setName(name);
 
         createBlock();
-
-        node.attachChild(this);
     }
 
     public void size(float x, float y, float z) {
@@ -67,212 +59,155 @@ public class Block extends RenderNode implements BlockInterface {
     }
 
     private void buildBlock() {
-        //front => back
-        normals[0] = new Vector3f(0, 0, 1);
-        normals[1] = new Vector3f(0, 0, 1);
-        normals[2] = new Vector3f(0, 0, 1);
-        normals[3] = new Vector3f(0, 0, 1);
+        //Top - 0
+        attachChild((BlockFace) faces[0]);
 
-        vertices[0] = new Vector3f(-0.5f, 1f, 0.5f);
-        vertices[1] = new Vector3f( 0.5f, 1f, 0.5f);
-        vertices[2] = new Vector3f(-0.5f, 0f, 0.5f);
-        vertices[3] = new Vector3f( 0.5f, 0f, 0.5f);
+        //Bottom - 1
+        attachChild((BlockFace) faces[1]);
 
-        texCoord[0] = new Vector2f(0,0);
-        texCoord[1] = new Vector2f(1,0);
-        texCoord[2] = new Vector2f(0,1);
-        texCoord[3] = new Vector2f(1,1);
+        //Front - 2
+        attachChild((BlockFace) faces[2]);
 
-        //back -> front
-        normals[4] = new Vector3f(0, 0, -1);
-        normals[5] = new Vector3f(0, 0, -1);
-        normals[6] = new Vector3f(0, 0, -1);
-        normals[7] = new Vector3f(0, 0, -1);
+        //Back - 3
+        attachChild((BlockFace) faces[3]);
 
-        vertices[4] = new Vector3f( 0.5f, 1f, -0.5f);
-        vertices[5] = new Vector3f(-0.5f, 1f, -0.5f);
-        vertices[6] = new Vector3f( 0.5f, 0f, -0.5f);
-        vertices[7] = new Vector3f(-0.5f, 0f, -0.5f);
+        //Left - 4
+        attachChild((BlockFace) faces[4]);
 
-        texCoord[4] = texCoord[0];
-        texCoord[5] = texCoord[1];
-        texCoord[6] = texCoord[2];
-        texCoord[7] = texCoord[3];
-
-        //top
-        normals[8] = new Vector3f(0, 1, 0);
-        normals[9] = new Vector3f(0, 1, 0);
-        normals[10] = new Vector3f(0, 1, 0);
-        normals[11] = new Vector3f(0, 1, 0);
-
-        vertices[8]  = new Vector3f(-0.5f,  1f, -0.5f);
-        vertices[9]  = new Vector3f( 0.5f,  1f, -0.5f);
-        vertices[10] = new Vector3f(-0.5f,  1f,  0.5f);
-        vertices[11] = new Vector3f( 0.5f,  1f,  0.5f);
-
-        texCoord[8]  = texCoord[0];
-        texCoord[9]  = texCoord[1];
-        texCoord[10] = texCoord[2];
-        texCoord[11] = texCoord[3];
-
-        //left
-        normals[12] = new Vector3f(-1, 0, 0);
-        normals[13] = new Vector3f(-1, 0, 0);
-        normals[14] = new Vector3f(-1, 0, 0);
-        normals[15] = new Vector3f(-1, 0, 0);
-
-        vertices[12]  = new Vector3f(-0.5f,  1f, -0.5f);
-        vertices[13]  = new Vector3f(-0.5f,  1f,  0.5f);
-        vertices[14]  = new Vector3f(-0.5f, 0f, -0.5f);
-        vertices[15]  = new Vector3f(-0.5f, 0f,  0.5f);
-
-        texCoord[12] = texCoord[0];
-        texCoord[13] = texCoord[1];
-        texCoord[14] = texCoord[2];
-        texCoord[15] = texCoord[3];
-
-        //right
-        normals[16] = new Vector3f(1, 0, 0);
-        normals[17] = new Vector3f(1, 0, 0);
-        normals[18] = new Vector3f(1, 0, 0);
-        normals[19] = new Vector3f(1, 0, 0);
-
-        vertices[16]  = new Vector3f(0.5f,  1f,  0.5f);
-        vertices[17]  = new Vector3f(0.5f,  1f, -0.5f);
-        vertices[18]  = new Vector3f(0.5f, 0f,  0.5f);
-        vertices[19]  = new Vector3f(0.5f, 0f, -0.5f);
-
-        texCoord[16] = texCoord[0];
-        texCoord[17] = texCoord[1];
-        texCoord[18] = texCoord[2];
-        texCoord[19] = texCoord[3];
-
-        //bottom
-        normals[20] = new Vector3f(0, -1, 0);
-        normals[21] = new Vector3f(0, -1, 0);
-        normals[22] = new Vector3f(0, -1, 0);
-        normals[23] = new Vector3f(0, -1, 0);
-
-        vertices[20] = new Vector3f(-0.5f, 0f,  0.5f);
-        vertices[21] = new Vector3f( 0.5f, 0f,  0.5f);
-        vertices[22]  = new Vector3f(-0.5f, 0f, -0.5f);
-        vertices[23]  = new Vector3f( 0.5f, 0f, -0.5f);
-
-        texCoord[20]  = texCoord[0];
-        texCoord[21]  = texCoord[1];
-        texCoord[22] = texCoord[2];
-        texCoord[23] = texCoord[3];
+        //Right - 5
+        attachChild((BlockFace) faces[5]);
     }
 
-    public void optimizeFor(BObject parent, Vector3f b_pos) {
+
+    public void optimizeFor(BObject parent, Vector3f b_pos, boolean optimize_neighbours) {
         //block obj_loc
         Vector3f pos = this.getNode().getLocalTranslation();
 
         //back
-        BlockInterface bbb = parent.getBlock(b_pos.x, b_pos.y, b_pos.z + 1);
-        boolean bbs = bbb != null ? bbb.isSolid() : false;
+        BlockInterface bbb = parent.getBlock(b_pos.x, b_pos.y, b_pos.z + 1, true);
 
-        //front
-        BlockInterface bfb = parent.getBlock(b_pos.x, b_pos.y, b_pos.z - 1);
-        boolean bfs = bfb != null ? bfb.isSolid() : false;
-
-        //left
-        BlockInterface blb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z);
-        boolean bls = blb != null ? blb.isSolid() : false;
-
-        //right
-        BlockInterface brb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z);
-        boolean brs = brb != null ? brb.isSolid() : false;
-
-        //top
-        BlockInterface btb = parent.getBlock(b_pos.x, b_pos.y + 1, b_pos.z);
-        boolean bts = btb != null ? btb.isSolid() : false;
-
-        //left-back
-        BlockInterface blbb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z + 1);
-        boolean blbs = blbb != null ? blbb.isSolid() : false;
-
-        //right-back
-        BlockInterface brbb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z + 1);
-        boolean brbs = brbb != null ? brbb.isSolid() : false;
-
-        //left-front
-        BlockInterface blfb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z - 1);
-        boolean blfs = blfb != null ? blfb.isSolid() : false;
-
-        //right-front
-        BlockInterface brfb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z - 1);
-        boolean brfs = brfb != null ? brfb.isSolid() : false;
-         mesh.setDynamic();
-
-        //Warning blockinterface and vertex lef/right coords are flipped
-        //top must be free for sloping
-        if(!bts) {
-            //slope back
-            if((brs && bls && bfs && !bbs) || (bfs && !brs && !bls && !bbs)) {
-                //Back
-                vertices[0] = new Vector3f(-0.5f, 1f, -0.5f);
-                vertices[1] = new Vector3f( 0.5f, 1f, -0.5f);
-
-                //Top
-                vertices[10] = new Vector3f(-0.5f,  1f,  -0.5f);
-                vertices[11] = new Vector3f( 0.5f,  1f,  -0.5f);
-
-                //Left
-                vertices[13]  = new Vector3f(-0.5f,  1f,  -0.5f);
-
-                //Right
-                vertices[16]  = new Vector3f(0.5f,  1f,  -0.5f);
-            }
-
-            //slope right
-            if((brs && bbs && bfs && !bls) || (brs && !bbs && !bfs && !bls)) {
-                //Back
-                vertices[0] = new Vector3f( 0.5f, 1f, 0.5f);
-
-                //Top
-                vertices[8]  = new Vector3f(0.5f,  1f, -0.5f);
-                vertices[10] = new Vector3f(0.5f,  1f,  0.5f);
-
-                //Left
-                vertices[12]  = new Vector3f(0.5f,  1f, -0.5f);
-                vertices[13]  = new Vector3f(0.5f,  1f,  0.5f);;
-
-                //front
-                vertices[5] = new Vector3f(0.5f, 1f, -0.5f);
-            }
-
-            //slope left
-            if((!brs && bbs && bfs && bls) || (!brs && !bbs && !bfs && bls)) {
-                //Back
-                vertices[1] = new Vector3f(-0.5f, 1f, 0.5f);
-
-                //Top
-          //      vertices[9]  = new Vector3f(-0.5f,  1f, -0.5f);
-          //      vertices[11] = new Vector3f(-0.5f,  1f,  0.5f);
-
-                //Left
-                vertices[12]  = new Vector3f(-0.5f,  1f, -0.5f);
-                vertices[13]  = new Vector3f(-0.5f,  1f,  0.5f);;
-
-                //front
-                vertices[4] = new Vector3f(-0.5f, 1f, -0.5f);
-            }
+        if(bbb != null && optimize_neighbours) {
+            bbb.optimizeFor(parent, new Vector3f(b_pos.x, b_pos.y, b_pos.z + 1), false);
         }
 
-        refreshBlock();
+        boolean bbs = bbb != null ? (bbb.isSolid() && (!bbb.isTransparant() || (bbb.isTransparant() && isTransparant()))) : false;
+
+        //front
+        BlockInterface bfb = parent.getBlock(b_pos.x, b_pos.y, b_pos.z - 1, true);
+
+        if(bfb != null && optimize_neighbours) {
+            bfb.optimizeFor(parent, new Vector3f(b_pos.x, b_pos.y, b_pos.z - 1), false);
+        }
+
+        boolean bfs = bfb != null ? (bfb.isSolid() && (!bfb.isTransparant() || (bfb.isTransparant() && isTransparant()))) : false;
+
+        //left
+        BlockInterface blb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z, true);
+
+        if(blb != null && optimize_neighbours) {
+            blb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z), false);
+        }
+
+        boolean bls = blb != null ? blb.isSolid() && (!blb.isTransparant() || (blb.isTransparant() && isTransparant())) : false;
+
+        //right
+        BlockInterface brb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z, true);
+
+        if(brb != null && optimize_neighbours) {
+            brb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z), false);
+        }
+
+        boolean brs = brb != null ? brb.isSolid() && (!brb.isTransparant() || (brb.isTransparant() && isTransparant())) : false;
+
+        //top
+        BlockInterface btb = parent.getBlock(b_pos.x, b_pos.y + 1, b_pos.z, true);
+
+        if(btb != null && optimize_neighbours) {
+            btb.optimizeFor(parent, new Vector3f(b_pos.x, b_pos.y + 1, b_pos.z), false);
+        }
+
+        boolean bts = btb != null ? btb.isSolid() && (!btb.isTransparant() || (btb.isTransparant() && isTransparant())) : false;
+
+        //under
+        BlockInterface bub = parent.getBlock(b_pos.x, b_pos.y - 1, b_pos.z, true);
+
+        if(bub != null && optimize_neighbours) {
+            bub.optimizeFor(parent, new Vector3f(b_pos.x, b_pos.y - 1, b_pos.z), false);
+        }
+
+        boolean bus = bub != null ? bub.isSolid() && (!bub.isTransparant() || (bub.isTransparant() && isTransparant())) : false;
+
+        //left-back
+        BlockInterface blbb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z + 1, true);
+
+        if(blbb != null && optimize_neighbours) {
+            blbb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z + 1), false);
+        }
+
+        boolean blbs = blbb != null ? blbb.isSolid() && (!blbb.isTransparant() || (blbb.isTransparant() && isTransparant())) : false;
+
+        //right-back
+        BlockInterface brbb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z + 1, true);
+
+        if(brbb != null && optimize_neighbours) {
+            brbb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z + 1), false);
+        }
+
+        boolean brbs = brbb != null ? brbb.isSolid() && (!brbb.isTransparant() || (brbb.isTransparant() && isTransparant())) : false;
+
+        //left-front
+        BlockInterface blfb = parent.getBlock(b_pos.x - 1, b_pos.y, b_pos.z - 1, true);
+
+        if(blfb != null && optimize_neighbours) {
+            blfb.optimizeFor(parent, new Vector3f(b_pos.x - 1, b_pos.y, b_pos.z - 1), false);
+        }
+
+        boolean blfs = blfb != null ? blfb.isSolid() && (!blfb.isTransparant() || (blfb.isTransparant() && isTransparant())) : false;
+
+        //right-front
+        BlockInterface brfb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z - 1, true);
+
+        if(brfb != null && optimize_neighbours) {
+            brfb.optimizeFor(parent, new Vector3f(b_pos.x + 1, b_pos.y, b_pos.z - 1), false);
+        }
+
+        boolean brfs = brfb != null ? brfb.isSolid() && (!brfb.isTransparant() || (brfb.isTransparant() && isTransparant())) : false;
+
+        //some culling
+        if(bts) {
+            faces[0].setVisible(false);
+        }
+
+        if(bus) {
+            faces[1].setVisible(false);
+        }
+
+        if(bfs) {
+            faces[2].setVisible(false);
+        }
+
+        if(bbs) {
+            faces[3].setVisible(false);
+        }
+
+        if(bls) {
+            faces[4].setVisible(false);
+        }
+
+        if(brs) {
+            faces[5].setVisible(false);
+        }
+    }
+
+    public void optimizeFor(BObject parent, Vector3f b_pos) {
+        optimizeFor(parent, b_pos, false);
     }
 
     public void refreshBlock() {
-//
-        mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(normals));
-        mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(vertices));
-        mesh.setBuffer(Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord));
-        mesh.setBuffer(Type.Index,    1, BufferUtils.createIntBuffer(indexes));
-
-        TangentBinormalGenerator.generate(mesh);
-
-        mesh.updateBound();
+        for(int i = 0; i < faces.length; i++) {
+            BlockFace b = (BlockFace) faces[i];
+            b.updateFace();
+        }
     }
 
     private void createBlock() {
@@ -396,18 +331,14 @@ public class Block extends RenderNode implements BlockInterface {
     }
 
     public GroupNode getNode() {
-        return node;
+        return this;
     }
 
     public void setAlpha(boolean alpha) {
-        if(alpha) {
-            getMaterial().getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        }
-        else {
-            Material mat = getMaterial();
-            mat.getAdditionalRenderState().setBlendMode(BlendMode.Off);
-            setMaterial(mat);
-            setQueueBucket(Bucket.Inherit);
+        for(int i = 0;i < faces.length; i++) {
+            if(hasChild((BlockFace) faces[i])) {
+                faces[i].setAlpha(alpha);
+            }
         }
     }
 
@@ -420,10 +351,28 @@ public class Block extends RenderNode implements BlockInterface {
     }
 
     public Vector3f getLocation() {
-        return node.getLocalTranslation();
+        return getLocalTranslation();
     }
 
     public boolean isSolid() {
         return solid;
+    }
+
+    @Override
+    public final void setName(String name) {
+        super.setName(name);
+
+        for(int i = 0;i < faces.length;i++) {
+            BlockFace b = (BlockFace) faces[i];
+            b.setName(name);
+        }
+    }
+
+    public boolean isTransparant() {
+        return transparant;
+    }
+
+    public void isTransparant(boolean transparant) {
+        this.transparant = transparant;
     }
 }

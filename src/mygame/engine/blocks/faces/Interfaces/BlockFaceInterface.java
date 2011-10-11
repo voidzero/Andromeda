@@ -4,11 +4,15 @@
  */
 package mygame.engine.blocks.faces.Interfaces;
 
+import com.jme3.material.Material;
+
 /**
  *
  * @author Dansion
  */
 public interface BlockFaceInterface {
+    public void resetMesh();
+
     public void slopeTopLeft();
 
     public void slopeTopRight();
@@ -41,7 +45,9 @@ public interface BlockFaceInterface {
 
     public void slopeBottomRightFront();
 
+    public void setAlpha(boolean alpha);
+
     public void setVisible(boolean visible);
 
-
+    public void setMaterial(Material material);
 }

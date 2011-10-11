@@ -98,7 +98,7 @@ public class Scaling extends GroupNode implements Control {
             }
 
             getLocalTranslation().addLocal(cam_pos);
-            System.out.println(getLocalTranslation());
+//            System.out.println(getLocalTranslation());
         }
     }
 

@@ -5,9 +5,7 @@
 package mygame.engine.blocks;
 
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.nodes.GroupNode;
 import mygame.engine.objects.BObject;
@@ -23,6 +21,7 @@ public class Blocks extends GroupNode implements BlockInterface {
     private boolean solid = true;
 
     private Block[] blocks;
+    private boolean transparant = false;
 
     public Blocks(int size, String name) {
         super(name);
@@ -105,15 +104,7 @@ public class Blocks extends GroupNode implements BlockInterface {
         Material mat = null;
 
         for(int i=0;i<block_amount;i++) {
-            if(alpha) {
-                blocks[i].getMaterial().getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-            }
-            else {
-                mat = blocks[i].getMaterial();
-                mat.getAdditionalRenderState().setBlendMode(BlendMode.Off);
-                blocks[i].setMaterial(mat);
-                blocks[i].setQueueBucket(Bucket.Inherit);
-            }
+            blocks[i].setAlpha(alpha);
         }
     }
 
@@ -129,12 +120,24 @@ public class Blocks extends GroupNode implements BlockInterface {
         return solid;
     }
 
-    public void optimizeFor(BObject parent, Vector3f b_pos) {
+    public void optimizeFor(BObject parent, Vector3f b_pos , boolean optimize_neighbours) {
         for(int i = 0; i < block_amount; i++) {
             Block b = blocks[i];
             Vector3f tot = new Vector3f(this.getNode().getLocalTranslation());
             tot.addLocal(b.getLocalTranslation());
-            b.optimizeFor(parent, tot);
+            b.optimizeFor(parent, tot, optimize_neighbours);
         }
+    }
+
+    public boolean isTransparant() {
+        return transparant;
+    }
+
+    public void isTransparant(boolean transparant) {
+        this.transparant = transparant;
+    }
+
+    public void optimizeFor(BObject parent, Vector3f b_pos) {
+        optimizeFor(parent, b_pos, false);
     }
 }

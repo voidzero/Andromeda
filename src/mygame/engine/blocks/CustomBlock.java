@@ -19,6 +19,7 @@ import mygame.engine.objects.BObject;
 public class CustomBlock extends GroupNode implements BlockInterface {
     private Node model;
     private boolean solid = true;
+    private boolean transparant = false;
 
     public CustomBlock() {
         super("CustomBlock");
@@ -64,4 +65,14 @@ public class CustomBlock extends GroupNode implements BlockInterface {
     }
 
     public void optimizeFor(BObject parent, Vector3f b_pos) {}
+    
+    public void optimizeFor(BObject parent, Vector3f b_pos, boolean optimize_neighbours) {}
+
+    public boolean isTransparant() {
+        return transparant;
+    }
+
+    public void isTransparant(boolean transparant) {
+        this.transparant = transparant;
+    }
 }

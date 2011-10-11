@@ -44,6 +44,8 @@ public class BObject extends GroupNode {
             newBlock.getNode().setLocalTranslation(position);
             attachChild(newBlock.getNode());
 
+            newBlock.optimizeFor(this, newBlock.getNode().getLocalTranslation(), true);
+
         } catch (InstantiationException ex) {
             Logger.getLogger(BObject.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -52,7 +54,7 @@ public class BObject extends GroupNode {
     }
 
     public void removeBlock(Vector3f position) {
-        BlockInterface b = getBlock(position);
+        BlockInterface b = getBlock(position, false);
 
         if(b != null) {
             b.getNode().getParent().detachChild(b.getNode());
@@ -61,23 +63,28 @@ public class BObject extends GroupNode {
         }
     }
 
-    public BlockInterface getBlock(float x, float y, float z) {
+    public BlockInterface getBlock(float x, float y, float z, boolean single) {
         for(int i = 0; i < blocks.size(); i++) {
             BlockInterface b = blocks.get(i);
 
-            for(int i2 = 0; i2 < b.amount(); i2++) {
-                Block b2 = b.getBlock(i2);
-                if(b2.getWorldTranslation().x == x && b2.getWorldTranslation().y == y && b2.getWorldTranslation().z == z) {
-                    return b;
+            if(single) {
+                for(int i2 = 0; i2 < b.amount(); i2++) {
+                    Block b2 = b.getBlock(i2);
+                    if(b2.getWorldTranslation().x == x && b2.getWorldTranslation().y == y && b2.getWorldTranslation().z == z) {
+                        return b2;
+                    }
                 }
+            }
+            else {
+                return b;
             }
         }
 
         return null;
     }
 
-    public BlockInterface getBlock(Vector3f position) {
-        return getBlock(position.x, position.y, position.z);
+    public BlockInterface getBlock(Vector3f position, boolean single) {
+        return getBlock(position.x, position.y, position.z, single);
     }
 
     public int getFloorHeight() {

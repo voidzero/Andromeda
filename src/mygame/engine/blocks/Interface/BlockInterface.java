@@ -30,5 +30,11 @@ public interface BlockInterface {
 
     public boolean isSolid();
 
+    public void isTransparant(boolean transparant);
+
+    public boolean isTransparant();
+
     public void optimizeFor(BObject parent, Vector3f b_pos);
+
+    public void optimizeFor(BObject parent, Vector3f b_pos, boolean optimize_neighbours);
 }

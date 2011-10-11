@@ -4,6 +4,8 @@
  */
 package mygame.engine.blocks.faces;
 
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import mygame.engine.blocks.faces.Interfaces.BlockFaceInterface;
 
 /**
@@ -13,73 +15,97 @@ import mygame.engine.blocks.faces.Interfaces.BlockFaceInterface;
 public class TopFace extends BlockFace implements BlockFaceInterface {
     public TopFace() {
         super("TopFace");
+
+        resetMesh();
     }
-    
+
+    public final void resetMesh() {
+        indexes[0] = 0;
+        indexes[1] = 2;
+        indexes[2] = 1;
+        indexes[3] = 1;
+        indexes[4] = 2;
+        indexes[5] = 3;
+
+        normals[0] = new Vector3f(0, 1, 0);
+        normals[1] = new Vector3f(0, 1, 0);
+        normals[2] = new Vector3f(0, 1, 0);
+        normals[3] = new Vector3f(0, 1, 0);
+
+        vertices[0] = new Vector3f(-0.5f, 1f, -0.5f);
+        vertices[1] = new Vector3f( 0.5f, 1f, -0.5f);
+        vertices[2] = new Vector3f(-0.5f, 1f,  0.5f);
+        vertices[3] = new Vector3f( 0.5f, 1f,  0.5f);
+
+        texCoord[0] = new Vector2f(0, 0);
+        texCoord[1] = new Vector2f(1, 0);
+        texCoord[2] = new Vector2f(0, 1);
+        texCoord[3] = new Vector2f(1, 1);
+
+        updateFace();
+    }
+
     public void slopeTopLeft() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopRight() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopLeftBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopRightBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopLeftFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeTopRightFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setVisible(false);
     }
 
     public void slopeBottomLeft() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomRight() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomLeftBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomRightBack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomLeftFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        resetMesh();
     }
 
     public void slopeBottomRightFront() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setVisible(boolean visible) {
-        setVisible(visible);
+        resetMesh();
     }
 }
