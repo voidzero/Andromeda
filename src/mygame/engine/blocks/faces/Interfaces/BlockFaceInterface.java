@@ -5,6 +5,7 @@
 package mygame.engine.blocks.faces.Interfaces;
 
 import com.jme3.material.Material;
+import mygame.engine.blocks.faces.BlockFace.Sloping;
 
 /**
  *
@@ -50,4 +51,10 @@ public interface BlockFaceInterface {
     public void setVisible(boolean visible);
 
     public void setMaterial(Material material);
+
+    public void setSloping(Sloping mode);
+
+    public boolean isSloped();
+
+    public Sloping getSlopeMode();
 }

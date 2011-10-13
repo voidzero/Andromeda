@@ -20,6 +20,7 @@ public class BottomFace extends BlockFace implements BlockFaceInterface {
     }
 
     public final void resetMesh() {
+        mode = Sloping.none;
         indexes[0] = 0;
         indexes[1] = 2;
         indexes[2] = 1;

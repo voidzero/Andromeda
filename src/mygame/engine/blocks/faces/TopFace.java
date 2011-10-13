@@ -20,6 +20,7 @@ public class TopFace extends BlockFace implements BlockFaceInterface {
     }
 
     public final void resetMesh() {
+        mode = Sloping.none;
         indexes[0] = 0;
         indexes[1] = 2;
         indexes[2] = 1;
@@ -77,12 +78,12 @@ public class TopFace extends BlockFace implements BlockFaceInterface {
         setVisible(false);
     }
 
-    public void slopeBottomLeft() {}
-    public void slopeBottomRight() {}
-    public void slopeBottomFront() {}
-    public void slopeBottomBack() {}
-    public void slopeBottomLeftBack() {}
-    public void slopeBottomRightBack() {}
-    public void slopeBottomLeftFront() {}
-    public void slopeBottomRightFront() {}
+    public void slopeBottomLeft() { mode = Sloping.none; }
+    public void slopeBottomRight() { mode = Sloping.none; }
+    public void slopeBottomFront() { mode = Sloping.none; }
+    public void slopeBottomBack() { mode = Sloping.none; }
+    public void slopeBottomLeftBack() { mode = Sloping.none; }
+    public void slopeBottomRightBack() { mode = Sloping.none; }
+    public void slopeBottomLeftFront() { mode = Sloping.none; }
+    public void slopeBottomRightFront() { mode = Sloping.none; }
 }

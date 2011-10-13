@@ -6,6 +6,7 @@ import com.jme3.scene.Geometry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.engine.Engine;
+import mygame.helpers.Math.MersenneTwisterFast;
 import mygame.helpers.Share;
 /**
  * Andromeda
@@ -52,6 +53,25 @@ public class Main extends SimpleApplication {
         engine = Engine.getInstance();
 
         guiNode.detachAllChildren();
+
+        MersenneTwisterFast rand = new MersenneTwisterFast(12345);
+
+        for(int i = 1; i < 6; i++) {
+            System.out.println(rand.nextInt());
+        }
+
+        rand = new MersenneTwisterFast(12345);
+
+        for (int i = 1; i < 6; i++) {
+            System.out.println(rand.nextInt(1000));
+        }
+
+
+        rand = new MersenneTwisterFast(12345);
+
+        for (int i = 1; i < 6; i++) {
+            System.out.println(rand.nextInt(i));
+        }
 
         renderManager.setHandleTranslucentBucket(true);
         renderManager.removeMainView("Default");

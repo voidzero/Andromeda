@@ -14,6 +14,7 @@ import mygame.Assets;
 import mygame.engine.blocks.Interface.BlockInterface;
 import mygame.engine.blocks.faces.BackFace;
 import mygame.engine.blocks.faces.BlockFace;
+import mygame.engine.blocks.faces.BlockFace.Sloping;
 import mygame.engine.blocks.faces.BottomFace;
 import mygame.engine.blocks.faces.FrontFace;
 import mygame.engine.blocks.faces.Interfaces.BlockFaceInterface;
@@ -36,6 +37,8 @@ public class Block extends GroupNode implements BlockInterface {
     public int x = 0, y = 0, z = 0;
 
     public BlockFaceInterface [] faces = {new TopFace(), new BottomFace(), new FrontFace(), new BackFace(), new LeftFace(), new RightFace()};
+    public enum blockFaces {Top, Bottom, Front, Back, Left, Right};
+
     private boolean transparant = false;
 
     public Block() {
@@ -139,6 +142,8 @@ public class Block extends GroupNode implements BlockInterface {
         }
 
         boolean bus = bub != null ? bub.isSolid() && (!bub.isTransparant() || (bub.isTransparant() && isTransparant())) : false;
+        //if this is block.y is 0 then we fake a block underneath this one.
+        bus = b_pos.y == 0 ? true : bus;
 
         //left-back
         BlockInterface blbb = parent.getBlock(b_pos.x + 1, b_pos.y, b_pos.z + 1, true);
@@ -176,88 +181,124 @@ public class Block extends GroupNode implements BlockInterface {
 
         boolean brfs = brfb != null ? brfb.isSolid() && (!brfb.isTransparant() || (brfb.isTransparant() && isTransparant())) : false;
 
-        //some culling
-        if(bts) {
-            faces[0].setVisible(false);
-        }
-
-        if(bus) {
-            faces[1].setVisible(false);
-        }
-
-        if(bfs) {
-            faces[2].setVisible(false);
-        }
-
-        if(bbs) {
-            faces[3].setVisible(false);
-        }
-
-        if(bls) {
-            faces[4].setVisible(false);
-        }
-
-        if(brs) {
-            faces[5].setVisible(false);
-        }
-
-        //sloping - top free
-        if(!bts) {
+        //sloping - top free - bottom solid
+        if(!bts && bus) {
             //left
             if((!bls && bbs && bfs && brs) || (!bls && !bbs && !bfs && brs)) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopLeft();
+                    faces[i].setSloping(Sloping.slopeTopLeft);
                 }
             }
 
             //right
             if((!brs && bbs && bfs && bls) || (!brs && !bbs && !bfs && bls)) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopRight();
+                    faces[i].setSloping(Sloping.slopeTopRight);
                 }
             }
 
             //back
             if((!bbs && bls && brs && bfs) || (!bbs && !bls && !brs && bfs)) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopBack();
+                    faces[i].setSloping(Sloping.slopeTopBack);
                 }
             }
 
             //front
             if((!bfs && bls && brs && bbs) || (!bfs && !bls && !brs && bbs)) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopFront();
+                    faces[i].setSloping(Sloping.slopeTopFront);
                 }
             }
 
             //back-left
             if(!bbs && !bls && brs && bfs && brfs) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopLeftBack();
+                    faces[i].setSloping(Sloping.slopeTopLeftBack);
                 }
             }
 
             //back-right
             if(!bbs && !brs && bls && bfs && blfs) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopRightBack();
+                    faces[i].setSloping(Sloping.slopeTopRightBack);
                 }
             }
 
             //front-left
             if(!bfs && !bls && brs && bbs && brbs) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopLeftFront();
+                    faces[i].setSloping(Sloping.slopeTopLeftFront);
                 }
             }
 
             //front-right
             if(!bfs && !brs && bls && bbs && blbs) {
                 for(int i = 0; i < faces.length; i++) {
-                    faces[i].slopeTopRightFront();
+                    faces[i].setSloping(Sloping.slopeTopRightFront);
                 }
             }
+        }
+
+        ////some culling
+        //sloping == sloping
+        //        OR
+        //slope && niet-slope
+        if(bts &&
+                (
+                    (btb.getBlock(0).getFace(blockFaces.Bottom).isSloped() == getFace(blockFaces.Top).isSloped())// ||
+                   // (btb.getBlock(0).getFace(blockFaces.Bottom).isSloped() && !getFace(blockFaces.Top).isSloped())
+                )
+            ) {
+            faces[0].setVisible(false);
+        }
+
+        //extra check for fake block beneath
+        if(bub != null) {
+            if(bus &&
+                    (
+                        (bub.getBlock(0).getFace(blockFaces.Top).isSloped() == getFace(blockFaces.Bottom).isSloped()) //||
+                     //   (bub.getBlock(0).getFace(blockFaces.Top).isSloped() && !getFace(blockFaces.Bottom).isSloped())
+                    )
+                ) {
+                faces[1].setVisible(false);
+            }
+        }
+
+        if(bfs &&
+                (
+                    (bfb.getBlock(0).getFace(blockFaces.Back).isSloped() == getFace(blockFaces.Front).isSloped())// ||
+                //    (bfb.getBlock(0).getFace(blockFaces.Back).isSloped() && !getFace(blockFaces.Front).isSloped())
+                )
+            ) {
+            faces[2].setVisible(false);
+        }
+
+        if(bbs &&
+                (
+                    (bbb.getBlock(0).getFace(blockFaces.Front).isSloped() == getFace(blockFaces.Back).isSloped()) //||
+                 //   (bbb.getBlock(0).getFace(blockFaces.Front).isSloped() && !getFace(blockFaces.Back).isSloped())
+                )
+            ) {
+            faces[3].setVisible(false);
+        }
+
+        if(bls &&
+                (
+                    (blb.getBlock(0).getFace(blockFaces.Right).isSloped() == getFace(blockFaces.Left).isSloped())// ||
+                 //   (blb.getBlock(0).getFace(blockFaces.Right).isSloped() && !getFace(blockFaces.Left).isSloped())
+                )
+            ) {
+            faces[4].setVisible(false);
+        }
+
+        if(brs &&
+                (
+                    (brb.getBlock(0).getFace(blockFaces.Left).isSloped() == getFace(blockFaces.Right).isSloped())// ||
+                  //  (brb.getBlock(0).getFace(blockFaces.Left).isSloped() && !getFace(blockFaces.Right).isSloped())
+                )
+            ) {
+            faces[5].setVisible(false);
         }
     }
 
@@ -458,5 +499,9 @@ public class Block extends GroupNode implements BlockInterface {
 
     public void isTransparant(boolean transparant) {
         this.transparant = transparant;
+    }
+
+    public BlockFaceInterface getFace(blockFaces face) {
+        return faces[face.ordinal()];
     }
 }

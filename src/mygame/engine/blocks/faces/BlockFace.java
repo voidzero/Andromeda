@@ -13,6 +13,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.TangentBinormalGenerator;
+import mygame.engine.blocks.faces.Interfaces.BlockFaceInterface;
 import mygame.engine.nodes.RenderNode;
 
 /**
@@ -25,6 +26,13 @@ public class BlockFace extends RenderNode {
     public Vector2f [] texCoord = new Vector2f[4];
 
     public int [] indexes = new int[6];
+
+    public enum Sloping {slopeTopLeft, slopeTopRight, slopeTopFront, slopeTopBack, slopeTopLeftBack, slopeTopRightBack, slopeTopLeftFront, slopeTopRightFront,
+                         slopeBottomLeft, slopeBottomRight, slopeBottomFront, slopeBottomBack, slopeBottomLeftBack, slopeBottomRightBack, slopeBottomLeftFront, slopeBottomRightFront,
+                         none
+                      };
+
+    public Sloping mode = Sloping.none;
 
     public BlockFace() {
         this("BlockFace");
@@ -74,4 +82,77 @@ public class BlockFace extends RenderNode {
             setCullHint(CullHint.Always);
         }
     }
+
+     public void setSloping(Sloping mode) {
+         BlockFaceInterface f = (BlockFaceInterface) this;
+
+         this.mode = mode;
+
+         switch(mode) {
+             case none:
+                 f.resetMesh();
+                 break;
+             case slopeTopLeft:
+                 f.slopeTopLeft();
+                 break;
+             case slopeTopRight:
+                 f.slopeTopRight();
+                 break;
+             case slopeTopFront:
+                 f.slopeTopFront();
+                 break;
+             case slopeTopBack:
+                 f.slopeTopBack();
+                 break;
+             case slopeTopLeftBack:
+                 f.slopeTopLeftBack();
+                 break;
+             case slopeTopRightBack:
+                 f.slopeTopRightBack();
+                 break;
+             case slopeTopLeftFront:
+                 f.slopeTopLeftFront();
+                 break;
+             case slopeTopRightFront:
+                 f.slopeTopRightFront();
+                 break;
+             case slopeBottomLeft:
+                 f.slopeBottomLeft();
+                 break;
+             case slopeBottomRight:
+                 f.slopeBottomRight();
+                 break;
+             case slopeBottomFront:
+                 f.slopeBottomFront();
+                 break;
+             case slopeBottomBack:
+                 f.slopeBottomBack();
+                 break;
+             case slopeBottomLeftBack:
+                 f.slopeBottomLeftBack();
+                 break;
+             case slopeBottomRightBack:
+                 f.slopeBottomRightBack();
+                 break;
+             case slopeBottomLeftFront:
+                 f.slopeBottomLeftFront();
+                 break;
+             case slopeBottomRightFront:
+                 f.slopeBottomRightFront();
+                 break;
+         }
+     }
+
+     public boolean isSloped() {
+         if(mode == Sloping.none) {
+             return false;
+         }
+         else {
+             return true;
+         }
+     }
+
+     public Sloping getSlopeMode() {
+         return mode;
+     }
 }

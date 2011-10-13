@@ -20,6 +20,7 @@ public class RightFace extends BlockFace implements BlockFaceInterface {
     }
 
     public final void resetMesh() {
+        mode = Sloping.none;
         indexes[0] = 0;
         indexes[1] = 2;
         indexes[2] = 1;
@@ -45,8 +46,6 @@ public class RightFace extends BlockFace implements BlockFaceInterface {
         updateFace();
     }
 
-    public void slopeTopLeft() {}
-
     public void slopeTopRight() {
         vertices[0] = new Vector3f(0.5f, 1f,  -0.5f);
         vertices[1] = new Vector3f(0.5f, 1f,   0.5f);
@@ -64,16 +63,12 @@ public class RightFace extends BlockFace implements BlockFaceInterface {
         updateFace();
     }
 
-    public void slopeTopLeftBack() {}
-
     public void slopeTopRightBack() {
         vertices[0] = new Vector3f(0.5f, 1f,  -0.5f);
         vertices[1] = new Vector3f(0.5f, 1f,  -0.5f);
         texCoord[1] = new Vector2f(0,0);
         updateFace();
     }
-
-    public void slopeTopLeftFront() {}
 
     public void slopeTopRightFront() {
         vertices[0] = new Vector3f(0.5f, 1f, 0.5f);
@@ -112,4 +107,8 @@ public class RightFace extends BlockFace implements BlockFaceInterface {
     public void slopeBottomRightFront() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public void slopeTopLeftFront() {}
+    public void slopeTopLeft() { mode = Sloping.none; }
+    public void slopeTopLeftBack() {  }
 }

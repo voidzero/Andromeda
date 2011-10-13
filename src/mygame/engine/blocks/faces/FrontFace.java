@@ -20,6 +20,7 @@ public class FrontFace extends BlockFace implements BlockFaceInterface {
     }
 
     public final void resetMesh() {
+        mode = Sloping.none;
         indexes[0] = 0;
         indexes[1] = 2;
         indexes[2] = 1;
@@ -96,10 +97,10 @@ public class FrontFace extends BlockFace implements BlockFaceInterface {
     }
 
     //face must be invisible when this slopes are active so no need to slope
-    public void slopeBottomBack() {}
-    public void slopeBottomLeftBack() {}
-    public void slopeBottomRightBack() {}
-    public void slopeTopBack() {}
+    public void slopeBottomBack() { mode = Sloping.none; }
+    public void slopeBottomLeftBack() { mode = Sloping.none; }
+    public void slopeBottomRightBack() { mode = Sloping.none; }
+    public void slopeTopBack() { mode = Sloping.none; }
     public void slopeTopLeftBack() {}
     public void slopeTopRightBack() {}
 }
