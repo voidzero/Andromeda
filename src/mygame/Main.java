@@ -6,8 +6,12 @@ import com.jme3.scene.Geometry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.engine.Engine;
+import mygame.engine.gui.Text;
 import mygame.helpers.Math.MersenneTwisterFast;
 import mygame.helpers.Share;
+import mygame.helpers.threadloader.Loader;
+import mygame.helpers.threadloader.interfaces.LoaderListener;
+import mygame.helpers.threadloader.interfaces.LoaderTask;
 /**
  * Andromeda
  * @author BaseHosting.net
@@ -17,6 +21,7 @@ public class Main extends SimpleApplication {
     private String[] player_settings;
     private float counter = 0;
     private Engine engine = null;
+    public Loader load = new Loader();
 
    // protected boolean showSettings = false;
     private Geometry lightMdl;
@@ -52,7 +57,7 @@ public class Main extends SimpleApplication {
 
         engine = Engine.getInstance();
 
-        guiNode.detachAllChildren();
+       // guiNode.detachAllChildren();
 
         MersenneTwisterFast rand = new MersenneTwisterFast(12345);
 
@@ -61,7 +66,7 @@ public class Main extends SimpleApplication {
         }
 
         rand = new MersenneTwisterFast(12345);
-
+        engine.guiNode.attachChild(new Text("WFTF"));
         for (int i = 1; i < 6; i++) {
             System.out.println(rand.nextInt(1000));
         }

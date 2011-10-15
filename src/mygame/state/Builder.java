@@ -38,6 +38,7 @@ public class Builder extends AbstractState{
     private BluePrint blueprint;
     private boolean guiMode;
     private Grid grid;
+    private boolean saved = true;
 
     public Builder(Node parent) {
         this(parent, 30, 20, 60);
@@ -50,8 +51,8 @@ public class Builder extends AbstractState{
         this.size_y = size_y;
         this.size_z = size_z;
 
-        String [] keyActions = {"floorDown"        , "floorUp"            , "Catalog"     , "Save"        , "Load"};
-        int [] keyTriggers = {KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET, KeyInput.KEY_C, KeyInput.KEY_O, KeyInput.KEY_L};
+        String [] keyActions = {"floorDown"        , "floorUp"            , "Catalog"     , "Save"        , "Load"        , "New"};
+        int [] keyTriggers = {KeyInput.KEY_LBRACKET, KeyInput.KEY_RBRACKET, KeyInput.KEY_C, KeyInput.KEY_O, KeyInput.KEY_L, KeyInput.KEY_N};
 
         String [] mouseActions = {"addBlock",             "removeBlock"};
         int [] mouseTriggers =   {MouseInput.BUTTON_LEFT, MouseInput.BUTTON_RIGHT};
@@ -61,54 +62,62 @@ public class Builder extends AbstractState{
 
         actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
-                if("addBlock".equals(name) && keyPressed) {
-                    if(!guiMode && !sel.isBlocked()) {
-                        obj_loaded.addBlock(catalogPanel.getSelected(), checkNearCollision());
+                if(keyPressed) {
+                    if("New".equals(name)) {
+                        newObject();
                     }
-                    else {
-                        if(isCursorActive()) {
-                            //Pick Gui
-                            CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
+
+                    if("addBlock".equals(name)) {
+                        if(!guiMode && !sel.isBlocked()) {
+                            obj_loaded.addBlock(catalogPanel.getSelected(), checkNearCollision());
+                            saved = false;
+                        }
+                        else {
+                            if(isCursorActive()) {
+                                //Pick Gui
+                                CollisionResults shootables = getCursor().pickGui(guiNode, guiCam);
+                            }
                         }
                     }
-                }
 
-                if("Save".equals(name) && keyPressed) {
-                    obj_loaded.save("test.obj");
-                }
-
-                if("Load".equals(name) && keyPressed) {
-                    loadObject("test.obj");
-                }
-
-                if("floorUp".equals(name) && keyPressed) {
-                    obj_loaded.setCurrentFloor(obj_loaded.getCurrentFloor() + 1);
-                    grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
-                }
-
-                if("floorDown".equals(name) && keyPressed) {
-                    obj_loaded.setCurrentFloor(obj_loaded.getCurrentFloor() - 1);
-                    grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
-                }
-
-                if("Catalog".equals(name) && keyPressed) {
-                    if(catalogPanel.isActive()) {
-                        enableCursor(false);
-                        getCamera().setMode(CameraMode.FLY_CLIP);
-                        getCamera().setMovementSpeed(20);
-                        guiMode = false;
-                        guiNode.detachChild(catalogPanel);
+                    if("Save".equals(name)) {
+                        obj_loaded.save("test.obj");
                     }
-                    else {
-                        enableCursor(true);
-                        getCamera().setMode(CameraMode.STATIC);
-                        guiMode = true;
-                        guiNode.attachChild(catalogPanel);
-                    }
-                }
 
-                if("removeBlock".equals(name) && keyPressed) {
-                    obj_loaded.removeBlock(checkCollision());
+                    if("Load".equals(name)) {
+                        loadObject("test.obj");
+                    }
+
+                    if("floorUp".equals(name)) {
+                        obj_loaded.setCurrentFloor(obj_loaded.getCurrentFloor() + 1);
+                        grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
+                    }
+
+                    if("floorDown".equals(name)) {
+                        obj_loaded.setCurrentFloor(obj_loaded.getCurrentFloor() - 1);
+                        grid.setFloor(obj_loaded.getFloorHeight(), obj_loaded.getCurrentFloor());
+                    }
+
+                    if("Catalog".equals(name)) {
+                        if(catalogPanel.isActive()) {
+                            enableCursor(false);
+                            getCamera().setMode(CameraMode.FLY_CLIP);
+                            getCamera().setMovementSpeed(20);
+                            guiMode = false;
+                            guiNode.detachChild(catalogPanel);
+                        }
+                        else {
+                            enableCursor(true);
+                            getCamera().setMode(CameraMode.STATIC);
+                            guiMode = true;
+                            guiNode.attachChild(catalogPanel);
+                        }
+                    }
+
+                    if("removeBlock".equals(name)) {
+                        obj_loaded.removeBlock(checkCollision());
+                        saved = false;
+                    }
                 }
             }
         };
@@ -147,11 +156,11 @@ public class Builder extends AbstractState{
         else {
             throw new Exception("There is already an object loaded in the Builder");
         }
-        //@TODO Builder edit / load
     }
 
     public void save(BObject object) {
         object.save("test.obj");
+        saved = true;
     }
 
     @Override
@@ -221,7 +230,7 @@ public class Builder extends AbstractState{
         //clear object
         clearObject();
         newObject();
-
+        saved = false;
         //refresh grid
         refreshGrid();
 
@@ -250,6 +259,11 @@ public class Builder extends AbstractState{
         refreshGrid();
 
         sel.setTarget(obj_loaded);
+        saved = true;
+    }
+
+    public void saveChanges() {
+
     }
 }
 
