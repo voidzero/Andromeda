@@ -9,6 +9,7 @@ import com.jme3.input.InputManager;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
+import mygame.Main;
 
 /**
  *
@@ -18,17 +19,18 @@ public class Share {
     public Node rootNode;
     public RenderManager renderManager;
     public InputManager inputManager;
-    public AppStateManager stateManager; 
+    public AppStateManager stateManager;
     public AppSettings appSettings;
     public Node guiNode;
-    
-    //Singleton instance 
+
+    //Singleton instance
     private static final Share INSTANCE = new Share();
-    
+    public Main app;
+
     private Share() {
-        
+
     }
-    
+
     public static Share getInstance() {
         return INSTANCE;
     }

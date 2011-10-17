@@ -38,7 +38,6 @@ public class BObject extends GroupNode {
     public void addBlock(BlockInterface block, Vector3f position) {
         try {
             BlockInterface newBlock = block.getClass().newInstance();
-            System.out.println("addblock");
             blocks.add(newBlock);
 
             newBlock.getNode().setLocalTranslation(position);
